@@ -11,6 +11,8 @@ export function middleware(request: NextRequest) {
     path === '/signup' ||
     path === '/login' ||
     path === '/verify-email' ||
+    path === '/forgot-password' ||
+    path === '/reset-password' ||
     path === '/';
   const token = request.cookies.get('token')?.value || '';
 
