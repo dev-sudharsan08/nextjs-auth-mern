@@ -197,41 +197,70 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div className='max-w-6xl mx-auto px-4 py-8'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8'>
         {/* User Profile Section */}
-        <div className='bg-white rounded-xl shadow-lg p-6 mb-8'>
-          <div className='flex items-center justify-between mb-4'>
-            <h1 className='text-3xl font-bold text-slate-800'>Dashboard</h1>
+        <div className='bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl shadow-2xl p-6 sm:p-8 mb-8 border border-white border-opacity-20'>
+          <div className='flex flex-col sm:flex-row sm:items-center justify-between mb-6'>
+            <div className='flex items-center space-x-4 mb-4 sm:mb-0'>
+              <div className='w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center'>
+                <svg className='w-6 h-6 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' />
+                </svg>
+              </div>
+              <div>
+                <h1 className='text-2xl sm:text-3xl font-bold text-white'>Dashboard</h1>
+                <p className='text-slate-300 text-sm'>Welcome back, {user?.username}!</p>
+              </div>
+            </div>
             <div className='flex items-center space-x-4'>
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${user?.isVerified ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${user?.isVerified ? 'bg-green-500 bg-opacity-20 text-green-300 border border-green-400' : 'bg-red-500 bg-opacity-20 text-red-300 border border-red-400'
                 }`}>
-                {user?.isVerified ? 'Verified' : 'Not Verified'}
+                {user?.isVerified ? '✓ Verified' : '⚠ Not Verified'}
               </span>
             </div>
           </div>
 
           {user && (
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-              <div>
-                <h3 className='text-lg font-semibold text-slate-700 mb-2'>User Information</h3>
-                <div className='space-y-2'>
-                  <p><span className='font-medium'>Username:</span> {user.username}</p>
-                  <p><span className='font-medium'>Email:</span> {user.email}</p>
-                  <p><span className='font-medium'>Member since:</span> {new Date(user.createdAt).toLocaleDateString()}</p>
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+              <div className='bg-white bg-opacity-5 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-10'>
+                <h3 className='text-lg font-semibold text-white mb-4 flex items-center space-x-2'>
+                  <svg className='w-5 h-5 text-indigo-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' />
+                  </svg>
+                  <span>User Information</span>
+                </h3>
+                <div className='space-y-3'>
+                  <div className='flex items-center space-x-3'>
+                    <span className='text-slate-300 font-medium'>Username:</span>
+                    <span className='text-white'>{user.username}</span>
+                  </div>
+                  <div className='flex items-center space-x-3'>
+                    <span className='text-slate-300 font-medium'>Email:</span>
+                    <span className='text-white'>{user.email}</span>
+                  </div>
+                  <div className='flex items-center space-x-3'>
+                    <span className='text-slate-300 font-medium'>Member since:</span>
+                    <span className='text-white'>{new Date(user.createdAt).toLocaleDateString()}</span>
+                  </div>
                 </div>
               </div>
-              <div>
-                <h3 className='text-lg font-semibold text-slate-700 mb-2'>Quick Stats</h3>
+              <div className='bg-white bg-opacity-5 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-10'>
+                <h3 className='text-lg font-semibold text-white mb-4 flex items-center space-x-2'>
+                  <svg className='w-5 h-5 text-purple-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' />
+                  </svg>
+                  <span>Quick Stats</span>
+                </h3>
                 <div className='grid grid-cols-2 gap-4'>
-                  <div className='bg-blue-50 p-3 rounded-lg text-center'>
-                    <p className='text-2xl font-bold text-blue-600'>{tasks.length}</p>
-                    <p className='text-sm text-blue-800'>Total Tasks</p>
+                  <div className='bg-gradient-to-r from-blue-500 to-cyan-500 bg-opacity-20 p-4 rounded-xl text-center border border-blue-400 border-opacity-30'>
+                    <p className='text-2xl font-bold text-blue-300'>{tasks.length}</p>
+                    <p className='text-sm text-blue-200'>Total Tasks</p>
                   </div>
-                  <div className='bg-green-50 p-3 rounded-lg text-center'>
-                    <p className='text-2xl font-bold text-green-600'>
+                  <div className='bg-gradient-to-r from-green-500 to-emerald-500 bg-opacity-20 p-4 rounded-xl text-center border border-green-400 border-opacity-30'>
+                    <p className='text-2xl font-bold text-green-300'>
                       {tasks.filter(task => task.status === 'Done').length}
                     </p>
-                    <p className='text-sm text-green-800'>Completed</p>
+                    <p className='text-sm text-green-200'>Completed</p>
                   </div>
                 </div>
               </div>
@@ -240,9 +269,16 @@ export default function Dashboard() {
         </div>
 
         {/* Tasks Section */}
-        <div className='bg-white rounded-xl shadow-lg p-6'>
-          <div className='flex items-center justify-between mb-6'>
-            <h2 className='text-2xl font-bold text-slate-800'>My Tasks</h2>
+        <div className='bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl shadow-2xl p-6 sm:p-8 border border-white border-opacity-20'>
+          <div className='flex flex-col sm:flex-row sm:items-center justify-between mb-6'>
+            <div className='flex items-center space-x-3 mb-4 sm:mb-0'>
+              <div className='w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center'>
+                <svg className='w-5 h-5 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4' />
+                </svg>
+              </div>
+              <h2 className='text-2xl font-bold text-white'>My Tasks</h2>
+            </div>
             <button
               onClick={() => {
                 if (editingTask) {
@@ -251,18 +287,22 @@ export default function Dashboard() {
                   setShowAddTask(!showAddTask);
                 }
               }}
-              className='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200'
+              className='bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center space-x-2'
             >
-              {editingTask ? 'Cancel Edit' : (showAddTask ? 'Cancel' : 'Add New Task')}
+              <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 6v6m0 0v6m0-6h6m-6 0H6' />
+              </svg>
+              <span className='hidden sm:inline'>{editingTask ? 'Cancel Edit' : (showAddTask ? 'Cancel' : 'Add New Task')}</span>
+              <span className='sm:hidden'>{editingTask ? 'Cancel' : (showAddTask ? 'Cancel' : 'Add')}</span>
             </button>
           </div>
 
           {/* Add/Edit Task Form */}
           {(showAddTask || editingTask) && (
-            <form onSubmit={editingTask ? handleUpdateTask : handleAddTask} className='bg-gray-50 p-4 rounded-lg mb-6'>
+            <form onSubmit={editingTask ? handleUpdateTask : handleAddTask} className='bg-white bg-opacity-5 backdrop-blur-sm p-6 rounded-2xl mb-6 border border-white border-opacity-10'>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-1'>
+                  <label className='block text-sm font-medium text-white mb-2'>
                     Task Title *
                   </label>
                   <input
@@ -270,18 +310,18 @@ export default function Dashboard() {
                     required
                     value={newTask.title}
                     onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-                    className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
+                    className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white bg-opacity-10 backdrop-blur-sm placeholder-slate-300 text-white'
                     placeholder='Enter task title'
                   />
                 </div>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-1'>
+                  <label className='block text-sm font-medium text-white mb-2'>
                     Priority
                   </label>
                   <select
                     value={newTask.priority}
                     onChange={(e) => setNewTask({ ...newTask, priority: e.target.value as 'Low' | 'Medium' | 'High' })}
-                    className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
+                    className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white bg-opacity-10 backdrop-blur-sm text-white'
                   >
                     <option value='Low'>Low</option>
                     <option value='Medium'>Medium</option>

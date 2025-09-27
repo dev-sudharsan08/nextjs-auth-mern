@@ -56,27 +56,37 @@ const VerifyEmail = () => {
   return (
     <>
       <Spinner loading={loader} />
-      <div className='flex items-center justify-center min-h-screen'>
-        <div className='bg-white shadow-2xl rounded-xl p-8 w-full max-w-md transition-all duration-300 hover:scale-[1.01]'>
+      <div className='flex items-center justify-center min-h-screen px-4'>
+        <div className='bg-white bg-opacity-10 backdrop-blur-lg shadow-2xl rounded-3xl p-6 sm:p-8 w-full max-w-md border border-white border-opacity-20 transition-all duration-300 hover:scale-[1.02] hover:bg-opacity-20'>
           {isVerified ? (
             <div className='text-center'>
-              <div className='text-green-500 text-6xl mb-4'>✓</div>
-              <h1 className='text-2xl font-bold text-green-600 mb-4'>
+              <div className='w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6'>
+                <svg className='w-10 h-10 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
+                </svg>
+              </div>
+              <h1 className='text-2xl sm:text-3xl font-bold text-white mb-4'>
                 Email Verified Successfully!
               </h1>
-              <p className='text-gray-600 mb-4'>
+              <p className='text-slate-300 mb-6'>
                 Your email has been verified. You can now log in to your account.
               </p>
-              <p className='text-sm text-gray-500'>
-                Redirecting to login page...
-              </p>
+              <div className='flex items-center justify-center space-x-2 text-sm text-slate-400'>
+                <div className='w-2 h-2 bg-green-400 rounded-full animate-pulse'></div>
+                <span>Redirecting to login page...</span>
+              </div>
             </div>
           ) : (
             <div className='text-center'>
-              <h1 className='text-2xl font-bold text-slate-800 mb-4'>
+              <div className='w-20 h-20 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-6'>
+                <svg className='w-10 h-10 text-white animate-spin' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' />
+                </svg>
+              </div>
+              <h1 className='text-2xl sm:text-3xl font-bold text-white mb-4'>
                 Verifying Email...
               </h1>
-              <p className='text-gray-600'>
+              <p className='text-slate-300'>
                 Please wait while we verify your email address.
               </p>
             </div>

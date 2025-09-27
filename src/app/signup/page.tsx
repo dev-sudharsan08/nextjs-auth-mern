@@ -82,26 +82,34 @@ const SignUp = () => {
           />
         </div>
       )}
-      <div className='flex flex-col items-center justify-center'>
-        <div className='bg-white shadow-2xl rounded-xl p-8 w-full max-w-md transition-all duration-300 hover:scale-[1.01]'>
-          <h1 className='text-4xl font-extrabold mb-6 text-center text-slate-800 tracking-tight leading-tight drop-shadow-md'>
-            Sign Up
-          </h1>
+      <div className='flex flex-col items-center justify-center min-h-screen px-4'>
+        <div className='bg-white bg-opacity-10 backdrop-blur-lg shadow-2xl rounded-3xl p-6 sm:p-8 w-full max-w-md border border-white border-opacity-20 transition-all duration-300 hover:scale-[1.02] hover:bg-opacity-20'>
+          <div className='text-center mb-8'>
+            <div className='w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4'>
+              <svg className='w-8 h-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z' />
+              </svg>
+            </div>
+            <h1 className='text-3xl sm:text-4xl font-extrabold mb-2 text-white tracking-tight leading-tight'>
+              Join TaskFlow
+            </h1>
+            <p className='text-slate-300 text-sm sm:text-base'>Create your account and start organizing</p>
+          </div>
           <form className='space-y-4' onSubmit={handleSignUp} noValidate>
             <div>
               <label
                 htmlFor='username'
-                className='block mb-1 text-slate-700 font-semibold'
+                className='block mb-2 text-white font-semibold'
               >
                 <span>Username</span>
-                <span className='text-red-500'>*</span>
+                <span className='text-red-400'>*</span>
               </label>
               <input
                 type='text'
                 id='username'
                 name='username'
                 placeholder='Enter your username'
-                className='w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50 placeholder-slate-400 text-slate-700'
+                className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 bg-white bg-opacity-10 backdrop-blur-sm placeholder-slate-300 text-white'
                 onChange={(e) =>
                   setUserData((prev) => ({
                     ...prev,
@@ -114,17 +122,17 @@ const SignUp = () => {
             <div>
               <label
                 htmlFor='email'
-                className='block mb-1 text-slate-700 font-semibold'
+                className='block mb-2 text-white font-semibold'
               >
-                <span>Email</span>
-                <span className='text-red-500'>*</span>
+                <span>Email Address</span>
+                <span className='text-red-400'>*</span>
               </label>
               <input
                 type='email'
                 id='email'
                 name='email'
                 placeholder='Enter your email'
-                className='w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50 placeholder-slate-400 text-slate-700'
+                className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 bg-white bg-opacity-10 backdrop-blur-sm placeholder-slate-300 text-white'
                 onChange={(e) =>
                   setUserData((prev) => ({
                     ...prev,
@@ -137,17 +145,17 @@ const SignUp = () => {
             <div>
               <label
                 htmlFor='password'
-                className='block mb-1 text-slate-700 font-semibold'
+                className='block mb-2 text-white font-semibold'
               >
                 <span>Password</span>
-                <span className='text-red-500'>*</span>
+                <span className='text-red-400'>*</span>
               </label>
               <input
                 type='password'
                 id='password'
                 name='password'
                 placeholder='Enter your password'
-                className='w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50 placeholder-slate-400 text-slate-700'
+                className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 bg-white bg-opacity-10 backdrop-blur-sm placeholder-slate-300 text-white'
                 onChange={(e) =>
                   setUserData((prev) => ({
                     ...prev,
@@ -160,20 +168,20 @@ const SignUp = () => {
             <div className='text-center pt-4'>
               <button
                 type='submit'
-                className='bg-gradient-to-r from-blue-600 to-indigo-600
-              hover:from-blue-700 hover:to-indigo-700
-              text-white font-bold py-2 px-6 rounded-full shadow-lg
-              transition-all duration-300 hover:scale-105
-              focus:outline-none focus:ring-4 focus:ring-indigo-300
-              disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
+                className='w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-2xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 group'
                 disabled={signUpBtnDisabled}
               >
-                Sign Up
+                <span className='flex items-center justify-center space-x-2'>
+                  <svg className='w-5 h-5 group-hover:rotate-12 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z' />
+                  </svg>
+                  <span>Create Account</span>
+                </span>
               </button>
-              <div className='mt-6 text-center text-md text-slate-600'>
+              <div className='mt-6 text-center text-sm text-slate-300'>
                 <p>
                   Have an account?{' '}
-                  <Link href='/login' className='text-blue-500 underline'>
+                  <Link href='/login' className='text-green-400 hover:text-green-300 underline font-medium transition-colors'>
                     Login here
                   </Link>
                 </p>
