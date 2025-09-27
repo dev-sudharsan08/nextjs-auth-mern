@@ -56,44 +56,56 @@ const ForgotPassword = () => {
           />
         </div>
       )}
-      <div className='flex items-center justify-center min-h-screen'>
-        <div className='bg-white shadow-2xl rounded-xl p-8 w-full max-w-md transition-all duration-300 hover:scale-[1.01]'>
+      <div className='flex items-center justify-center min-h-screen px-4'>
+        <div className='bg-white bg-opacity-10 backdrop-blur-lg shadow-2xl rounded-3xl p-6 sm:p-8 w-full max-w-md border border-white border-opacity-20 transition-all duration-300 hover:scale-[1.02] hover:bg-opacity-20'>
           {isEmailSent ? (
             <div className='text-center'>
-              <div className='text-green-500 text-6xl mb-4'>✓</div>
-              <h1 className='text-2xl font-bold text-green-600 mb-4'>
+              <div className='w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6'>
+                <svg className='w-10 h-10 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
+                </svg>
+              </div>
+              <h1 className='text-2xl sm:text-3xl font-bold text-white mb-4'>
                 Email Sent Successfully!
               </h1>
-              <p className='text-gray-600 mb-4'>
+              <p className='text-slate-300 mb-6'>
                 Please check your email for password reset instructions.
               </p>
               <Link
                 href='/login'
-                className='text-blue-500 underline hover:text-blue-700'
+                className='text-green-400 hover:text-green-300 underline font-medium transition-colors'
               >
                 Back to Login
               </Link>
             </div>
           ) : (
             <>
-              <h1 className='text-4xl font-extrabold mb-6 text-center text-slate-800 tracking-tight leading-tight drop-shadow-md'>
-                Forgot Password
-              </h1>
+              <div className='text-center mb-8'>
+                <div className='w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4'>
+                  <svg className='w-8 h-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z' />
+                  </svg>
+                </div>
+                <h1 className='text-3xl sm:text-4xl font-extrabold mb-2 text-white tracking-tight leading-tight'>
+                  Forgot Password?
+                </h1>
+                <p className='text-slate-300 text-sm sm:text-base'>No worries, we'll send you reset instructions</p>
+              </div>
               <form className='space-y-4' onSubmit={handleForgotPassword} noValidate>
                 <div>
                   <label
                     htmlFor='email'
-                    className='block mb-1 text-slate-700 font-semibold'
+                    className='block mb-2 text-white font-semibold'
                   >
-                    <span>Email</span>
-                    <span className='text-red-500'>*</span>
+                    <span>Email Address</span>
+                    <span className='text-red-400'>*</span>
                   </label>
                   <input
                     type='email'
                     id='email'
                     name='email'
                     placeholder='Enter your email'
-                    className='w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50 placeholder-slate-400 text-slate-700'
+                    className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white bg-opacity-10 backdrop-blur-sm placeholder-slate-300 text-white'
                     onChange={(e) => setEmail(e.target.value.trim())}
                     value={email}
                     required
@@ -102,15 +114,20 @@ const ForgotPassword = () => {
                 <div className='text-center pt-4'>
                   <button
                     type='submit'
-                    className='bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
+                    className='w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold py-3 px-6 rounded-xl shadow-2xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 group'
                     disabled={!email.trim()}
                   >
-                    Send Reset Email
+                    <span className='flex items-center justify-center space-x-2'>
+                      <svg className='w-5 h-5 group-hover:rotate-12 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' />
+                      </svg>
+                      <span>Send Reset Email</span>
+                    </span>
                   </button>
-                  <div className='mt-6 text-center text-md text-slate-600'>
+                  <div className='mt-6 text-center text-sm text-slate-300'>
                     <p>
                       Remember your password?{' '}
-                      <Link href='/login' className='text-blue-500 underline'>
+                      <Link href='/login' className='text-orange-400 hover:text-orange-300 underline font-medium transition-colors'>
                         Login here
                       </Link>
                     </p>
