@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
     forgotPasswordToken: String,
     forgotPasswordTokenExpiry: Date,
     emailVerificationToken: String,
-    emailVerificationTokenTokenExpiry: Date,
+    emailVerificationTokenExpiry: Date,
     refreshToken: String,
   },
   { timestamps: true }

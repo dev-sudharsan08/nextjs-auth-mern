@@ -36,6 +36,7 @@ export default function Dashboard() {
     priority: 'Medium' as 'Low' | 'Medium' | 'High',
     dueDate: ''
   });
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [showAddTask, setShowAddTask] = useState(false);
   const [{ isError, message }, setIsError] = useState({
     isError: false,
@@ -98,6 +99,70 @@ export default function Dashboard() {
     } finally {
       setLoader(false);
     }
+  }
+
+  async function handleUpdateTask(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!editingTask) return;
+
+    setLoader(true);
+    try {
+      const response = await axios.put(`/api/users/tasks/${editingTask._id}`, {
+        title: newTask.title,
+        description: newTask.description,
+        priority: newTask.priority,
+        dueDate: newTask.dueDate,
+        status: editingTask.status
+      });
+
+      setTasks(tasks.map(task =>
+        task._id === editingTask._id ? response.data.task : task
+      ));
+      setNewTask({ title: '', description: '', priority: 'Medium', dueDate: '' });
+      setEditingTask(null);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage =
+          error.response.data?.error || 'Sorry Something went wrong';
+        setIsError({ isError: true, message: errorMessage });
+      }
+    } finally {
+      setLoader(false);
+    }
+  }
+
+  async function handleDeleteTask(taskId: string) {
+    if (!confirm('Are you sure you want to delete this task?')) return;
+
+    setLoader(true);
+    try {
+      await axios.delete(`/api/users/tasks/${taskId}`);
+      setTasks(tasks.filter(task => task._id !== taskId));
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage =
+          error.response.data?.error || 'Sorry Something went wrong';
+        setIsError({ isError: true, message: errorMessage });
+      }
+    } finally {
+      setLoader(false);
+    }
+  }
+
+  function handleEditTask(task: Task) {
+    setEditingTask(task);
+    setNewTask({
+      title: task.title,
+      description: task.description,
+      priority: task.priority,
+      dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : ''
+    });
+    setShowAddTask(false);
+  }
+
+  function handleCancelEdit() {
+    setEditingTask(null);
+    setNewTask({ title: '', description: '', priority: 'Medium', dueDate: '' });
   }
 
   const getPriorityColor = (priority: string) => {
@@ -179,16 +244,22 @@ export default function Dashboard() {
           <div className='flex items-center justify-between mb-6'>
             <h2 className='text-2xl font-bold text-slate-800'>My Tasks</h2>
             <button
-              onClick={() => setShowAddTask(!showAddTask)}
+              onClick={() => {
+                if (editingTask) {
+                  handleCancelEdit();
+                } else {
+                  setShowAddTask(!showAddTask);
+                }
+              }}
               className='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200'
             >
-              {showAddTask ? 'Cancel' : 'Add New Task'}
+              {editingTask ? 'Cancel Edit' : (showAddTask ? 'Cancel' : 'Add New Task')}
             </button>
           </div>
 
-          {/* Add Task Form */}
-          {showAddTask && (
-            <form onSubmit={handleAddTask} className='bg-gray-50 p-4 rounded-lg mb-6'>
+          {/* Add/Edit Task Form */}
+          {(showAddTask || editingTask) && (
+            <form onSubmit={editingTask ? handleUpdateTask : handleAddTask} className='bg-gray-50 p-4 rounded-lg mb-6'>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
                 <div>
                   <label className='block text-sm font-medium text-gray-700 mb-1'>
@@ -246,7 +317,7 @@ export default function Dashboard() {
               <div className='flex justify-end space-x-3'>
                 <button
                   type='button'
-                  onClick={() => setShowAddTask(false)}
+                  onClick={editingTask ? handleCancelEdit : () => setShowAddTask(false)}
                   className='px-4 py-2 text-gray-600 hover:text-gray-800 transition duration-200'
                 >
                   Cancel
@@ -255,7 +326,7 @@ export default function Dashboard() {
                   type='submit'
                   className='bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition duration-200'
                 >
-                  Add Task
+                  {editingTask ? 'Update Task' : 'Add Task'}
                 </button>
               </div>
             </form>
@@ -290,8 +361,24 @@ export default function Dashboard() {
                         )}
                       </div>
                     </div>
-                    <div className='text-sm text-gray-500'>
-                      {new Date(task.createdAt).toLocaleDateString()}
+                    <div className='flex items-center space-x-2'>
+                      <div className='text-sm text-gray-500'>
+                        {new Date(task.createdAt).toLocaleDateString()}
+                      </div>
+                      <div className='flex space-x-2'>
+                        <button
+                          onClick={() => handleEditTask(task)}
+                          className='text-blue-600 hover:text-blue-800 text-sm font-medium'
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteTask(task._id)}
+                          className='text-red-600 hover:text-red-800 text-sm font-medium'
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

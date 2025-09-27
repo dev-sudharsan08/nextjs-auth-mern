@@ -6,7 +6,7 @@ import connectDB from '@/dbConfig/dbConfig';
 
 connectDB();
 
-export default async function POST(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     const { token } = await request.json();
     if (!token) {

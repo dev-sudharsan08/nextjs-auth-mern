@@ -14,6 +14,7 @@ const SignUp = () => {
   });
   const [loader, setLoader] = useState(false);
   const [signUpBtnDisabled, setSignUpBtnDisabled] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [{ isError, message }, setIsError] = useState({
     isError: false,
     message: '',
@@ -27,6 +28,9 @@ const SignUp = () => {
       setSignUpBtnDisabled(true);
       const response = await axios.post('/api/users/signup', userData);
       console.log(response);
+      if (response.data.data.isVerificationMailSent) {
+        setIsSuccess(true);
+      }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage =
@@ -63,6 +67,16 @@ const SignUp = () => {
           <Alert
             message={message}
             type='error'
+            style={{ minWidth: '350px' }}
+            className='mb-7 text-center'
+          />
+        </div>
+      )}
+      {isSuccess && (
+        <div className='flex justify-center'>
+          <Alert
+            message='Registration successful! Please check your email for verification link.'
+            type='success'
             style={{ minWidth: '350px' }}
             className='mb-7 text-center'
           />
