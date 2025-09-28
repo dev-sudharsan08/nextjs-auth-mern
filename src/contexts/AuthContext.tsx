@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { setupAxiosInterceptors } from '../utils/tokenRefresh';
 
 interface User {
   _id: string;
@@ -77,6 +78,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   useEffect(() => {
+    // Setup axios interceptors for token refresh
+    setupAxiosInterceptors();
     checkAuth();
   }, []);
 

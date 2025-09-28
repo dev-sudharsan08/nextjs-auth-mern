@@ -47,7 +47,8 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json(
       {
         message: 'Token refreshed successfully',
-        success: true
+        success: true,
+        token: newAccessToken
       },
       { status: 200 }
     );
@@ -55,15 +56,17 @@ export async function POST(request: NextRequest) {
     // Set new cookies
     response.cookies.set('token', newAccessToken, {
       httpOnly: true,
-      maxAge: 60 * 60,
+      maxAge: 60 * 60, // 1 hour
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'lax',
+      path: '/'
     });
     response.cookies.set('refreshToken', newRefreshToken, {
       httpOnly: true,
-      maxAge: 5 * 24 * 60 * 60,
+      maxAge: 5 * 24 * 60 * 60, // 5 days
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'lax',
+      path: '/'
     });
 
     return response;

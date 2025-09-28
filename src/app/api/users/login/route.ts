@@ -58,15 +58,17 @@ export async function POST(request: NextRequest) {
 
     response.cookies.set('token', token, {
       httpOnly: true,
-      maxAge: 60 * 60,
+      maxAge: 60 * 60, // 1 hour
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'lax',
+      path: '/'
     });
     response.cookies.set('refreshToken', refreshToken, {
       httpOnly: true,
-      maxAge: 5 * 24 * 60 * 60,
+      maxAge: 5 * 24 * 60 * 60, // 5 days
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'lax',
+      path: '/'
     });
 
     return response;

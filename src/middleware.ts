@@ -21,39 +21,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/profile', request.url));
   }
 
-  // If no token and not on public route, try to refresh
+  // If no token and not on public route, redirect to login
   if (!token && !isPublicRoute) {
-    if (refreshToken) {
-      try {
-        // Try to refresh the token
-        const fetchResponse = await fetch(new URL('/api/users/refresh-token', request.url), {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Cookie': `refreshToken=${refreshToken}`
-          },
-        });
-
-        if (fetchResponse.ok) {
-          const data = await fetchResponse.json();
-          const newToken = data.token;
-
-          // Create response with new token
-          const nextResponse = NextResponse.next();
-          nextResponse.cookies.set('token', newToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 15 * 60, // 15 minutes
-          });
-          return nextResponse;
-        }
-      } catch (error) {
-        console.error('Token refresh failed:', error);
-      }
-    }
-
-    // If refresh failed or no refresh token, redirect to login
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
@@ -64,36 +33,9 @@ export async function middleware(request: NextRequest) {
       // Token is valid, continue
       return NextResponse.next();
     } catch (error) {
-      // Token is invalid, try to refresh
-      if (refreshToken) {
-        try {
-          const fetchResponse = await fetch(new URL('/api/users/refresh-token', request.url), {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Cookie': `refreshToken=${refreshToken}`
-            },
-          });
-
-          if (fetchResponse.ok) {
-            const data = await fetchResponse.json();
-            const newToken = data.token;
-
-            const nextResponse = NextResponse.next();
-            nextResponse.cookies.set('token', newToken, {
-              httpOnly: true,
-              secure: process.env.NODE_ENV === 'production',
-              sameSite: 'strict',
-              maxAge: 15 * 60, // 15 minutes
-            });
-            return nextResponse;
-          }
-        } catch (error) {
-          console.error('Token refresh failed:', error);
-        }
-      }
-
-      // If refresh failed, redirect to login
+      // Token is invalid, redirect to login
+      // Note: We don't try to refresh here to avoid middleware complexity
+      // Token refresh should be handled by the client-side or API routes
       return NextResponse.redirect(new URL('/login', request.url));
     }
   }
@@ -102,5 +44,14 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
 }

@@ -25,13 +25,15 @@ export async function GET(request: NextRequest) {
       httpOnly: true,
       maxAge: 0,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'lax',
+      path: '/'
     });
     response.cookies.set('refreshToken', '', {
       httpOnly: true,
       maxAge: 0,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'lax',
+      path: '/'
     });
 
     return response;
@@ -46,13 +48,15 @@ export async function GET(request: NextRequest) {
       httpOnly: true,
       maxAge: 0,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'lax',
+      path: '/'
     });
     response.cookies.set('refreshToken', '', {
       httpOnly: true,
       maxAge: 0,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'lax',
+      path: '/'
     });
 
     return response;
