@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/dbConfig/dbConfig';
-import Task from '@/models/taskMode';
+import Task from '@/models/taskModel';
 import getDataFromToken from '@/helpers/getDataFromToken';
 
 connectDB();
