@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import Link from 'next/link';
 import Spinner from '../components/reusable/spinner/spinner';
 import Alert from '../components/reusable/alert/alert';
 
@@ -217,6 +218,12 @@ export default function Dashboard() {
                 }`}>
                 {user?.isVerified ? '✓ Verified' : '⚠ Not Verified'}
               </span>
+              <Link
+                href='/change-password'
+                className='px-3 py-1 bg-blue-500 bg-opacity-20 text-blue-300 border border-blue-400 rounded-full text-sm font-medium hover:bg-opacity-30 transition-colors'
+              >
+                Change Password
+              </Link>
             </div>
           </div>
 

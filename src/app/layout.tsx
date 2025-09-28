@@ -3,12 +3,9 @@
 // import type { Metadata } from 'next';
 // import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import axios from 'axios';
-import { useState } from 'react';
-import Spinner from './components/reusable/spinner/spinner';
-import Alert from './components/reusable/alert/alert';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { AuthProvider } from '../contexts/AuthContext';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 // const geistSans = Geist({
 //   variable: '--font-geist-sans',
