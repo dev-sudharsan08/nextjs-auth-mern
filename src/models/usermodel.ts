@@ -36,11 +36,30 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    forgotPasswordToken: String,
-    forgotPasswordTokenExpiry: Date,
-    emailVerificationToken: String,
-    emailVerificationTokenExpiry: Date,
-    refreshToken: String,
+    forgotPasswordToken: {
+      type: String,
+      default: null
+    },
+    forgotPasswordTokenExpiry: {
+      type: Date,
+      default: null
+    },
+    emailVerificationToken: {
+      type: String,
+      default: null
+    },
+    emailVerificationTokenExpiry: {
+      type: Date,
+      default: null
+    },
+    refreshToken: {
+      type: String,
+      default: null
+    },
+    lastPasswordChange: {
+      type: Date,
+      default: Date.now
+    },
   },
   { timestamps: true }
 );

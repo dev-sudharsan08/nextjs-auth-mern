@@ -43,12 +43,31 @@ export async function POST(request: NextRequest) {
         message: 'User logged in successfully',
         success: true,
         isLoginSuccess: true,
+        data: {
+          user: {
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            isVerified: user.isVerified,
+            createdAt: user.createdAt
+          }
+        }
       },
       { status: 200 }
     );
 
-    response.cookies.set('token', token, { httpOnly: true, maxAge: 60 * 60 });
-    response.cookies.set('refreshToken', refreshToken, { httpOnly: true });
+    response.cookies.set('token', token, {
+      httpOnly: true,
+      maxAge: 60 * 60,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax'
+    });
+    response.cookies.set('refreshToken', refreshToken, {
+      httpOnly: true,
+      maxAge: 5 * 24 * 60 * 60,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax'
+    });
 
     return response;
   } catch (error: unknown) {

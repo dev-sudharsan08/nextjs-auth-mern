@@ -6,9 +6,11 @@ import Spinner from '../components/reusable/spinner/spinner';
 import Alert from '../components/reusable/alert/alert';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Login = () => {
   const router = useRouter();
+  const { login } = useAuth();
   const [userData, setUserData] = useState({
     email: '',
     password: '',
@@ -35,8 +37,12 @@ const Login = () => {
     setLoginBtnDisabled(true);
     try {
       const response = await axios.post('/api/users/login', userData);
-      console.log(response)
-      response?.data?.isLoginSuccess && router.push('/profile')
+      console.log(response);
+      if (response?.data?.isLoginSuccess) {
+        // Update auth context with user data
+        login(response.data.data.user);
+        router.push('/profile');
+      }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage =

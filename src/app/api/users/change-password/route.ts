@@ -47,8 +47,9 @@ export async function POST(request: NextRequest) {
     const salt = await bcryptjs.genSalt(10);
     const hashedNewPassword = await bcryptjs.hash(newPassword, salt);
 
-    // Update password
+    // Update password and last change date
     user.password = hashedNewPassword;
+    user.lastPasswordChange = new Date();
     await user.save();
 
     return NextResponse.json(

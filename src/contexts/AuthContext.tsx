@@ -48,11 +48,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = async () => {
     try {
+      setLoading(true);
       await axios.get('/api/users/logout');
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
       setUser(null);
+      setLoading(false);
       router.push('/login');
     }
   };
