@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import Link from 'next/link';
+import { FaUser, FaChartBar, FaTasks, FaPlus, FaPencilAlt, FaTrashAlt, FaLock, FaInfoCircle, FaCheckCircle, FaExclamationTriangle, FaHourglassHalf, FaExclamationCircle } from 'react-icons/fa';
 import Spinner from '../components/reusable/spinner/spinner';
 import Alert from '../components/reusable/alert/alert';
-import Link from 'next/link';
 
 interface User {
   _id: string;
@@ -27,7 +27,6 @@ interface Task {
 }
 
 export default function Dashboard() {
-  const router = useRouter();
   const [loader, setLoader] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -54,19 +53,15 @@ export default function Dashboard() {
     setLoader(true);
     try {
       const response = await axios.get('/api/users/details');
-      console.log(response);
       setUser(response.data.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage =
           error.response.data?.error || 'Sorry Something went wrong';
-        console.log(errorMessage);
         setIsError({ isError: true, message: errorMessage });
       } else if (error instanceof Error) {
-        console.log(error);
         setIsError({ isError: true, message: error.message });
       } else {
-        console.log('Unknown error', error);
         setIsError({ isError: true, message: 'Sorry Something went wrong' });
       }
     } finally {
@@ -85,6 +80,7 @@ export default function Dashboard() {
 
   async function handleAddTask(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setIsError({ isError: false, message: '' });
     setLoader(true);
     try {
       const response = await axios.post('/api/users/tasks', newTask);
@@ -104,6 +100,7 @@ export default function Dashboard() {
 
   async function handleUpdateTask(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setIsError({ isError: false, message: '' });
     if (!editingTask) return;
 
     setLoader(true);
@@ -134,7 +131,7 @@ export default function Dashboard() {
 
   async function handleDeleteTask(taskId: string) {
     if (!confirm('Are you sure you want to delete this task?')) return;
-
+    setIsError({ isError: false, message: '' });
     setLoader(true);
     try {
       await axios.delete(`/api/users/tasks/${taskId}`);
@@ -168,19 +165,19 @@ export default function Dashboard() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'High': return 'bg-red-100 text-red-800';
-      case 'Medium': return 'bg-yellow-100 text-yellow-800';
-      case 'Low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'High': return 'bg-red-600/30 text-red-200 border border-red-500/50';
+      case 'Medium': return 'bg-yellow-600/30 text-yellow-200 border border-yellow-500/50';
+      case 'Low': return 'bg-green-600/30 text-green-200 border border-green-500/50';
+      default: return 'bg-gray-600/30 text-gray-200 border border-gray-500/50';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Done': return 'bg-green-100 text-green-800';
-      case 'In Progress': return 'bg-blue-100 text-blue-800';
-      case 'To Do': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'Done': return 'bg-green-600/30 text-green-200 border border-green-500/50';
+      case 'In Progress': return 'bg-blue-600/30 text-blue-200 border border-blue-500/50';
+      case 'To Do': return 'bg-gray-600/30 text-gray-200 border border-gray-500/50';
+      default: return 'bg-gray-600/30 text-gray-200 border border-gray-500/50';
     }
   };
 
@@ -198,91 +195,118 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8'>
-        {/* User Profile Section */}
-        <div className='bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl shadow-2xl p-6 sm:p-8 mb-8 border border-white border-opacity-20'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='bg-opacity-10 backdrop-blur-lg rounded-3xl shadow-2xl p-6 sm:p-8 mb-8 border border-white border-opacity-20 transition-all duration-300 hover:scale-[1.005]'>
           <div className='flex flex-col sm:flex-row sm:items-center justify-between mb-6'>
             <div className='flex items-center space-x-4 mb-4 sm:mb-0'>
               <div className='w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center'>
-                <svg className='w-6 h-6 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' />
-                </svg>
+                <FaUser className='w-6 h-6 text-white' />
               </div>
               <div>
                 <h1 className='text-2xl sm:text-3xl font-bold text-white'>Dashboard</h1>
-                <p className='text-slate-300 text-sm'>Welcome back, {user?.username}!</p>
+                <p className='text-gray-200 text-sm'>Welcome back, {user?.username}!</p>
               </div>
             </div>
             <div className='flex items-center space-x-4'>
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${user?.isVerified ? 'bg-green-500 bg-opacity-20 text-green-300 border border-green-400' : 'bg-red-500 bg-opacity-20 text-red-300 border border-red-400'
+              <span className={`px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1 ${user?.isVerified
+                ? 'bg-green-500/20 text-green-300 border border-green-400/50'
+                : 'bg-red-500/20 text-red-300 border border-red-400/50'
                 }`}>
-                {user?.isVerified ? '✓ Verified' : '⚠ Not Verified'}
+                {user?.isVerified ? (
+                  <>
+                    <FaCheckCircle className='w-3 h-3' />
+                    <span>Verified</span>
+                  </>
+                ) : (
+                  <>
+                    <FaExclamationTriangle className='w-3 h-3' />
+                    <span>Not Verified</span>
+                  </>
+                )}
               </span>
+              {/* {user?.isVerified ? ( */}
               <Link
                 href='/change-password'
-                className='px-3 py-1 bg-blue-500 bg-opacity-20 text-blue-300 border border-blue-400 rounded-full text-sm font-medium hover:bg-opacity-30 transition-colors'
+                className='px-4 py-1.5 bg-gradient-to-r from-blue-500/30 to-indigo-500/30 text-white border border-indigo-400/50 rounded-full text-sm font-medium hover:from-blue-600/40 hover:to-indigo-600/40 transition-all duration-300 flex items-center space-x-1 shadow-md hover:shadow-indigo-500/30'
               >
-                Change Password
+                <FaLock className='w-3 h-3' />
+                <span>Change Password</span>
               </Link>
+              {/* ) : (
+                  <Link
+                      href='/verify-account'
+                      className='px-4 py-1.5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white border border-yellow-400/50 rounded-full text-sm font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 flex items-center space-x-1 shadow-lg hover:shadow-orange-500/50'
+                  >
+                      <FaInfoCircle className='w-3 h-3' />
+                      <span>Verify Account</span>
+                  </Link>
+              )} */}
             </div>
           </div>
-
           {user && (
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
-              <div className='bg-white bg-opacity-5 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-10'>
+              <div className='bg-opacity-5 backdrop-blur-sm rounded-2xl p-6 border border-cyan-600 border-opacity-10'>
                 <h3 className='text-lg font-semibold text-white mb-4 flex items-center space-x-2'>
-                  <svg className='w-5 h-5 text-indigo-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' />
-                  </svg>
+                  <FaUser className='w-5 h-5 text-indigo-400' />
                   <span>User Information</span>
                 </h3>
                 <div className='space-y-3'>
                   <div className='flex items-center space-x-3'>
-                    <span className='text-slate-300 font-medium'>Username:</span>
+                    <span className='text-gray-300 font-medium'>Username:</span>
                     <span className='text-white'>{user.username}</span>
                   </div>
                   <div className='flex items-center space-x-3'>
-                    <span className='text-slate-300 font-medium'>Email:</span>
+                    <span className='text-gray-300 font-medium'>Email:</span>
                     <span className='text-white'>{user.email}</span>
                   </div>
                   <div className='flex items-center space-x-3'>
-                    <span className='text-slate-300 font-medium'>Member since:</span>
+                    <span className='text-gray-300 font-medium'>Member since:</span>
                     <span className='text-white'>{new Date(user.createdAt).toLocaleDateString()}</span>
                   </div>
                 </div>
               </div>
-              <div className='bg-white bg-opacity-5 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-10'>
+              <div className='bg-opacity-5 backdrop-blur-sm rounded-2xl p-6 border border-cyan-600 border-opacity-10'>
                 <h3 className='text-lg font-semibold text-white mb-4 flex items-center space-x-2'>
-                  <svg className='w-5 h-5 text-purple-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' />
-                  </svg>
+                  <FaChartBar className='w-5 h-5 text-purple-400' />
                   <span>Quick Stats</span>
                 </h3>
-                <div className='grid grid-cols-2 gap-4'>
-                  <div className='bg-gradient-to-r from-blue-500 to-cyan-500 bg-opacity-20 p-4 rounded-xl text-center border border-blue-400 border-opacity-30'>
-                    <p className='text-2xl font-bold text-blue-300'>{tasks.length}</p>
-                    <p className='text-sm text-blue-200'>Total Tasks</p>
+                <div className='grid grid-cols-2 lg:grid-cols-4 gap-4'>
+                  <div className='bg-gradient-to-tr from-cyan-400/20 to-indigo-400/20 p-4 rounded-2xl text-center border border-cyan-300/50 shadow-lg hover:shadow-cyan-400/40 transition duration-300 transform hover:scale-[1.03]'>
+                    <FaTasks className='w-6 h-6 text-cyan-300 mx-auto mb-2' />
+                    <p className='text-3xl font-extrabold text-white'>{tasks.length}</p>
+                    <p className='text-sm text-cyan-200 mt-1'>Total Tasks</p>
                   </div>
-                  <div className='bg-gradient-to-r from-green-500 to-emerald-500 bg-opacity-20 p-4 rounded-xl text-center border border-green-400 border-opacity-30'>
-                    <p className='text-2xl font-bold text-green-300'>
-                      {tasks.filter(task => task.status === 'Done').length}
+                  <div className='bg-gradient-to-tr from-teal-400/20 to-green-400/20 p-4 rounded-2xl text-center border border-teal-300/50 shadow-lg hover:shadow-teal-400/40 transition duration-300 transform hover:scale-[1.03]'>
+                    <FaCheckCircle className='w-6 h-6 text-teal-300 mx-auto mb-2' />
+                    <p className='text-3xl font-extrabold text-white'>
+                      {tasks?.filter(task => task.status === 'Done')?.length}
                     </p>
-                    <p className='text-sm text-green-200'>Completed</p>
+                    <p className='text-sm text-teal-200 mt-1'>Completed</p>
+                  </div>
+                  <div className='bg-gradient-to-tr from-orange-400/20 to-amber-400/20 p-4 rounded-2xl text-center border border-orange-300/50 shadow-lg hover:shadow-orange-400/40 transition duration-300 transform hover:scale-[1.03]'>
+                    <FaHourglassHalf className='w-6 h-6 text-orange-300 mx-auto mb-2' />
+                    <p className='text-3xl font-extrabold text-white'>
+                      {tasks?.filter(task => task.status === 'In Progress')?.length}
+                    </p>
+                    <p className='text-sm text-orange-200 mt-1'>In Progress</p>
+                  </div>
+                  <div className='bg-gradient-to-tr from-fuchsia-400/20 to-red-400/20 p-4 rounded-2xl text-center border border-fuchsia-300/50 shadow-lg hover:shadow-fuchsia-400/40 transition duration-300 transform hover:scale-[1.03]'>
+                    <FaExclamationCircle className='w-6 h-6 text-red-300 mx-auto mb-2' />
+                    <p className='text-3xl font-extrabold text-white'>
+                      {tasks?.filter(task => task.priority === 'High')?.length}
+                    </p>
+                    <p className='text-sm text-red-200 mt-1'>High Priority</p>
                   </div>
                 </div>
               </div>
             </div>
           )}
         </div>
-
-        {/* Tasks Section */}
-        <div className='bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl shadow-2xl p-6 sm:p-8 border border-white border-opacity-20'>
+        <div className='bg-indigo-950/20 backdrop-blur-md shadow-2xl rounded-3xl p-6 sm:p-10 border-indigo-950/10 transition-all duration-300 hover:scale-[1.01] shadow-indigo-900/20 ring-2 ring-cyan-600/25 hover:ring-indigo-600/20'>
           <div className='flex flex-col sm:flex-row sm:items-center justify-between mb-6'>
             <div className='flex items-center space-x-3 mb-4 sm:mb-0'>
               <div className='w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center'>
-                <svg className='w-5 h-5 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4' />
-                </svg>
+                <FaTasks className='w-5 h-5 text-white' />
               </div>
               <h2 className='text-2xl font-bold text-white'>My Tasks</h2>
             </div>
@@ -296,69 +320,74 @@ export default function Dashboard() {
               }}
               className='bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center space-x-2'
             >
-              <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 6v6m0 0v6m0-6h6m-6 0H6' />
-              </svg>
-              <span className='hidden sm:inline'>{editingTask ? 'Cancel Edit' : (showAddTask ? 'Cancel' : 'Add New Task')}</span>
-              <span className='sm:hidden'>{editingTask ? 'Cancel' : (showAddTask ? 'Cancel' : 'Add')}</span>
+              {(editingTask || showAddTask) ? <FaInfoCircle className='w-4 h-4' /> : <FaPlus className='w-4 h-4' />}
+              <span className='hidden sm:inline'>{editingTask ? 'Cancel Edit' : (showAddTask ? 'Close Form' : 'Add New Task')}</span>
+              <span className='sm:hidden'>{editingTask ? 'Cancel' : (showAddTask ? 'Close' : 'Add')}</span>
             </button>
           </div>
-
-          {/* Add/Edit Task Form */}
           {(showAddTask || editingTask) && (
-            <form onSubmit={editingTask ? handleUpdateTask : handleAddTask} className='bg-white bg-opacity-5 backdrop-blur-sm p-6 rounded-2xl mb-6 border border-white border-opacity-10'>
+            <form onSubmit={editingTask ? handleUpdateTask : handleAddTask} className='bg-opacity-5 backdrop-blur-sm p-6 rounded-2xl mb-6 border border-white border-opacity-10'>
+              <h3 className='text-xl font-semibold text-indigo-300 mb-4'>{editingTask ? 'Edit Task' : 'Create New Task'}</h3>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
                 <div>
-                  <label className='block text-sm font-medium text-white mb-2'>
-                    Task Title *
+                  <label className='block text-sm font-medium text-white mb-2' htmlFor='title'>
+                    Task Title <span className='text-red-400'>*</span>
                   </label>
                   <input
+                    id='title'
+                    name='title'
                     type='text'
                     required
                     value={newTask.title}
-                    onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-                    className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white bg-opacity-10 backdrop-blur-sm placeholder-slate-300 text-white'
+                    onChange={(e) => {setNewTask({ ...newTask, title: e.target.value }); setIsError({ isError: false, message: '' })}}
+                    className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-opacity-10 backdrop-blur-sm placeholder-gray-400 text-white'
                     placeholder='Enter task title'
                   />
                 </div>
                 <div>
-                  <label className='block text-sm font-medium text-white mb-2'>
+                  <label className='block text-sm font-medium text-white mb-2' htmlFor='priority'>
                     Priority
                   </label>
                   <select
+                    id='priority'
+                    name='priority'
                     value={newTask.priority}
-                    onChange={(e) => setNewTask({ ...newTask, priority: e.target.value as 'Low' | 'Medium' | 'High' })}
-                    className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white bg-opacity-10 backdrop-blur-sm text-white'
+                    onChange={(e) => {setNewTask({ ...newTask, priority: e.target.value as 'Low' | 'Medium' | 'High' }); setIsError({ isError: false, message: '' })}}
+                    className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-opacity-10 backdrop-blur-sm text-white appearance-none pr-8'
                   >
-                    <option value='Low'>Low</option>
-                    <option value='Medium'>Medium</option>
-                    <option value='High'>High</option>
+                    <option className='bg-gray-800 text-white' value='Low'>Low</option>
+                    <option className='bg-gray-800 text-white' value='Medium'>Medium</option>
+                    <option className='bg-gray-800 text-white' value='High'>High</option>
                   </select>
                 </div>
               </div>
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-6'>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-1'>
+                  <label className='block text-sm font-medium text-white mb-2' htmlFor='description'>
                     Description
                   </label>
                   <textarea
+                    id='description'
+                    name='description'
                     value={newTask.description}
-                    onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-                    className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
+                    onChange={(e) => {setNewTask({ ...newTask, description: e.target.value }); setIsError({ isError: false, message: '' })}}
+                    className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-opacity-10 backdrop-blur-sm placeholder-gray-400 text-white'
                     rows={3}
                     placeholder='Enter task description'
                   />
                 </div>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-1'>
+                  <label className='block text-sm font-medium text-white mb-2' htmlFor='dueDate'>
                     Due Date
                   </label>
                   <input
+                    id='dueDate'
+                    name='dueDate'
                     type='date'
                     value={newTask.dueDate}
                     min={new Date().toISOString().split('T')[0]}
-                    onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
-                    className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white bg-opacity-10 backdrop-blur-sm text-white'
+                    onChange={(e) => {setNewTask({ ...newTask, dueDate: e.target.value }); setIsError({ isError: false, message: '' })}}
+                    className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-opacity-10 backdrop-blur-sm text-white appearance-none date-icon-white'
                   />
                 </div>
               </div>
@@ -366,65 +395,78 @@ export default function Dashboard() {
                 <button
                   type='button'
                   onClick={editingTask ? handleCancelEdit : () => setShowAddTask(false)}
-                  className='px-4 py-2 text-gray-600 hover:text-gray-800 transition duration-200'
+                  className='px-6 py-2 bg-gray-600/20 text-gray-300 border border-gray-400/30 rounded-lg hover:bg-gray-600/40 transition duration-200'
                 >
                   Cancel
                 </button>
                 <button
                   type='submit'
-                  className='bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition duration-200'
+                  className='bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-semibold px-6 py-2 rounded-lg transition duration-200 shadow-md'
                 >
                   {editingTask ? 'Update Task' : 'Add Task'}
                 </button>
               </div>
             </form>
           )}
-
-          {/* Tasks List */}
           <div className='space-y-4'>
             {tasks.length === 0 ? (
-              <div className='text-center py-8 text-gray-500'>
-                <p className='text-lg'>No tasks yet. Create your first task!</p>
+              <div className='text-center py-8 text-gray-400 bg-opacity-5 backdrop-blur-sm rounded-2xl border border-white border-opacity-10'>
+                <p className='text-lg'>No tasks yet. Create your first task! 🚀</p>
               </div>
             ) : (
               tasks.map((task) => (
-                <div key={task._id} className='border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-200'>
+                <div
+                  key={task._id}
+                  className='bg-white/15 backdrop-blur-sm rounded-xl p-5 border border-white/20 transition-all duration-300 hover:border-indigo-400/50 hover:shadow-xl'
+                >
+                  {task.priority === 'High' && (
+                    <div className='absolute top-0 left-0 bottom-0 w-1 bg-red-500 rounded-l-xl'></div>
+                  )}
+                  {task.priority === 'Medium' && (
+                    <div className='absolute top-0 left-0 bottom-0 w-1 bg-yellow-500 rounded-l-xl'></div>
+                  )}
+                  {task.priority === 'Low' && (
+                    <div className='absolute top-0 left-0 bottom-0 w-1 bg-green-500 rounded-l-xl'></div>
+                  )}
                   <div className='flex items-start justify-between'>
-                    <div className='flex-1'>
-                      <h3 className='text-lg font-semibold text-slate-800 mb-2'>{task.title}</h3>
+                    <div className='flex-1 pr-4'>
+                      <h3 className='text-xl font-bold text-white mb-1.5'>{task.title}</h3>
                       {task.description && (
-                        <p className='text-gray-600 mb-3'>{task.description}</p>
+                        <p className='text-indigo-200 text-sm mb-4 line-clamp-2'>{task.description}</p>
                       )}
-                      <div className='flex items-center space-x-4'>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(task.status)}`}>
+                      <div className='flex flex-wrap items-center gap-3 mt-2'>
+                        <span className={`px-3 py-1 rounded-lg text-xs font-semibold uppercase tracking-wider ${getStatusColor(task.status)}`}>
                           {task.status}
                         </span>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(task.priority)}`}>
+                        <span className={`px-3 py-1 rounded-lg text-xs font-semibold uppercase tracking-wider ${getPriorityColor(task.priority)}`}>
                           {task.priority} Priority
                         </span>
                         {task.dueDate && (
-                          <span className='text-sm text-gray-500'>
-                            Due: {new Date(task.dueDate).toLocaleDateString()}
+                          <span className='text-sm text-indigo-300 flex items-center space-x-1'>
+                            <FaHourglassHalf className='w-3 h-3 text-indigo-400' />
+                            <span>Due: {new Date(task.dueDate).toLocaleDateString()}</span>
                           </span>
                         )}
                       </div>
                     </div>
-                    <div className='flex items-center space-x-2'>
-                      <div className='text-sm text-gray-500'>
-                        {new Date(task.createdAt).toLocaleDateString()}
+                    <div className='flex flex-col items-end space-y-3 pt-1'>
+                      <div className='text-xs text-gray-400'>
+                        Created: {new Date(task.createdAt).toLocaleDateString()}
                       </div>
                       <div className='flex space-x-2'>
                         <button
                           onClick={() => handleEditTask(task)}
-                          className='text-blue-600 hover:text-blue-800 text-sm font-medium'
+                          className='p-2 rounded-full text-blue-300 hover:bg-blue-500/20 transition-colors flex items-center justify-center group'
+                          title='Edit Task'
                         >
-                          Edit
+                          <FaPencilAlt className='w-4 h-4 group-hover:scale-110 transition-transform' />
                         </button>
                         <button
                           onClick={() => handleDeleteTask(task._id)}
-                          className='text-red-600 hover:text-red-800 text-sm font-medium'
+                          className='p-2 rounded-full text-red-300 hover:bg-red-500/20 transition-colors flex items-center justify-center group'
+                          title='Delete Task'
                         >
-                          Delete
+                          <FaTrashAlt className='w-4 h-4 group-hover:scale-110 transition-transform' />
                         </button>
                       </div>
                     </div>

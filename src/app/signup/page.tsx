@@ -138,8 +138,10 @@ const SignUp = () => {
 
     if (!data.confirmPassword) {
         errors.confirmPassword = 'Confirm password is required.';
+    } else if (data.confirmPassword.length < 8) {
+      errors.confirmPassword = 'Password must be at least 8 characters long.';
     } else if (data.password !== data.confirmPassword) {
-        errors.confirmPassword = 'Passwords do not match.';
+      errors.confirmPassword = 'Passwords do not match.';
     }
 
     return errors;
@@ -208,7 +210,7 @@ const SignUp = () => {
   return (
     <>
       <Spinner loading={loader} />
-      <div className='flex flex-col items-center justify-center min-h-screen px-4 py-8'>
+      <div className='flex flex-col items-center justify-center px-4'>
         <div className='w-full max-w-md mb-6'>
           {isError && (
             <Alert

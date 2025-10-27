@@ -9,9 +9,19 @@ import Alert from '../components/reusable/alert/alert';
 import { FaLock, FaEye, FaEyeSlash, FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa';
 import { HiOutlineExclamationCircle } from 'react-icons/hi2';
 
+interface password {
+  newPassword: string;
+  confirmPassword: string;
+}
+
+interface FormErrors {
+  newPassword?: string;
+  confirmPassword?: string;
+}
+
 interface PasswordInputProps {
   id: string;
-  name: keyof LoginData;
+  name: keyof password;
   label: string;
   placeholder: string;
   value: string;
@@ -113,6 +123,8 @@ const ResetPassword = () => {
 
     if (!password.confirmPassword) {
         errors.confirmPassword = 'Confirm password is required.';
+    } else if (password.confirmPassword.length < 8) {
+      errors.confirmPassword = 'Password must be at least 8 characters long.';
     } else if (password.newPassword !== password.confirmPassword) {
         errors.confirmPassword = 'Passwords do not match.';
     }
@@ -175,7 +187,7 @@ const ResetPassword = () => {
       [name]: undefined,
     }));
 
-    setIsError({});
+    setIsError({ isError: false, message: ''});
   };
 
   if (!token) {
@@ -207,7 +219,7 @@ const ResetPassword = () => {
   return (
     <>
       <Spinner loading={loader} />
-      <div className='flex flex-col items-center justify-center min-h-screen px-4'>
+      <div className='flex flex-col items-center justify-center px-4'>
         {isError && (
           <div className='w-full max-w-md mb-6'>
             <Alert

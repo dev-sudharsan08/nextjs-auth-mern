@@ -19,7 +19,7 @@ export default function RootLayout({
       <body
       >
         <Header />
-        <main className='px-4 sm:px-6 lg:px-8 py-6 sm:py-20 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen relative overflow-hidden'>
+        <main className='px-4 sm:px-6 lg:px-8 py-16 sm:py-20 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden'>
           <div
             className='absolute inset-0 opacity-20'
             style={{

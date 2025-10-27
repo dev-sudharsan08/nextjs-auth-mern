@@ -79,7 +79,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center p-4'>
+    <div className='flex flex-col items-center justify-center px-4'>
       <Spinner loading={loader} />
       {isError && (
         <div className='flex justify-center'>

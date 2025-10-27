@@ -62,7 +62,7 @@ const homeData = [
   ];
 
   return (
-    <div className='min-h-screen flex flex-col items-center justify-center px-4 relative'>
+    <div className='flex flex-col items-center justify-center px-4 relative'>
       <div className='text-center max-w-7xl mx-auto mx-auto relative z-10'>
         <div className='mb-8'>
           <h1 className='text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent leading-tight'>

@@ -23,4 +23,18 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+
+  .date-icon-white::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+  }
+
+  .date-icon-white {
+    color: white;
+  }
+
+  .date-icon-white::-moz-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+  }
 }
