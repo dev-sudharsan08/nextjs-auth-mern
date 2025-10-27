@@ -191,7 +191,7 @@ export default function ChangePassword() {
           confirmPassword: '',
         });
         setTimeout(() => {
-          router.push('/profile');
+          router.push('/dashboard');
         }, 2000);
       }
     } catch (error: unknown) {
@@ -221,11 +221,11 @@ export default function ChangePassword() {
             Password Changed Successfully!
           </h1>
           <p className='text-slate-300 mb-6'>
-            Your password has been updated successfully. You will be redirected to your profile.
+            Your password has been updated successfully. You will be redirected to your dashboard.
           </p>
           <div className='flex items-center justify-center space-x-2 text-sm text-slate-400'>
             <div className='w-2 h-2 bg-green-400 rounded-full animate-pulse'></div>
-            <span>Redirecting to profile...</span>
+            <span>Redirecting to dashboard...</span>
           </div>
         </div>
       </div>
@@ -296,8 +296,8 @@ export default function ChangePassword() {
               </button>
               <div className='mt-6 text-center text-sm text-slate-300'>
                 <p>
-                  <Link href='/profile' className='text-blue-400 hover:text-blue-300 underline font-bold transition-colors'>
-                    Back to Profile
+                  <Link href='/dashboard' className='text-blue-400 hover:text-blue-300 underline font-bold transition-colors'>
+                    Back to Dashboard
                   </Link>
                 </p>
               </div>

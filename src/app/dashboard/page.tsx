@@ -264,6 +264,15 @@ export default function Dashboard() {
                     <span className='text-white'>{new Date(user.createdAt).toLocaleDateString()}</span>
                   </div>
                 </div>
+                <div className='mt-6 pt-4 border-t border-white/10'>
+                  <Link
+                    href='/update-profile'
+                    className='w-full inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl transition-all duration-300 hover:from-purple-700 hover:to-pink-700'
+                  >
+                    <FaPencilAlt className='w-4 h-4 mr-2' />
+                    Update Profile
+                  </Link>
+                </div>
               </div>
               <div className='bg-opacity-5 backdrop-blur-sm rounded-2xl p-6 border border-cyan-600 border-opacity-10'>
                 <h3 className='text-lg font-semibold text-white mb-4 flex items-center space-x-2'>
@@ -339,7 +348,7 @@ export default function Dashboard() {
                     type='text'
                     required
                     value={newTask.title}
-                    onChange={(e) => {setNewTask({ ...newTask, title: e.target.value }); setIsError({ isError: false, message: '' })}}
+                    onChange={(e) => { setNewTask({ ...newTask, title: e.target.value }); setIsError({ isError: false, message: '' }) }}
                     className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-opacity-10 backdrop-blur-sm placeholder-gray-400 text-white'
                     placeholder='Enter task title'
                   />
@@ -352,7 +361,7 @@ export default function Dashboard() {
                     id='priority'
                     name='priority'
                     value={newTask.priority}
-                    onChange={(e) => {setNewTask({ ...newTask, priority: e.target.value as 'Low' | 'Medium' | 'High' }); setIsError({ isError: false, message: '' })}}
+                    onChange={(e) => { setNewTask({ ...newTask, priority: e.target.value as 'Low' | 'Medium' | 'High' }); setIsError({ isError: false, message: '' }) }}
                     className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-opacity-10 backdrop-blur-sm text-white appearance-none pr-8'
                   >
                     <option className='bg-gray-800 text-white' value='Low'>Low</option>
@@ -370,7 +379,7 @@ export default function Dashboard() {
                     id='description'
                     name='description'
                     value={newTask.description}
-                    onChange={(e) => {setNewTask({ ...newTask, description: e.target.value }); setIsError({ isError: false, message: '' })}}
+                    onChange={(e) => { setNewTask({ ...newTask, description: e.target.value }); setIsError({ isError: false, message: '' }) }}
                     className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-opacity-10 backdrop-blur-sm placeholder-gray-400 text-white'
                     rows={3}
                     placeholder='Enter task description'
@@ -386,7 +395,7 @@ export default function Dashboard() {
                     type='date'
                     value={newTask.dueDate}
                     min={new Date().toISOString().split('T')[0]}
-                    onChange={(e) => {setNewTask({ ...newTask, dueDate: e.target.value }); setIsError({ isError: false, message: '' })}}
+                    onChange={(e) => { setNewTask({ ...newTask, dueDate: e.target.value }); setIsError({ isError: false, message: '' }) }}
                     className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-opacity-10 backdrop-blur-sm text-white appearance-none date-icon-white'
                   />
                 </div>

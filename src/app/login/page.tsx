@@ -141,7 +141,7 @@ const Login = () => {
       console.log(response);
       if (response?.data?.isLoginSuccess) {
         setUserData({ email: '', password: '' });
-        router.push('/profile');
+        router.push('/dashboard');
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {

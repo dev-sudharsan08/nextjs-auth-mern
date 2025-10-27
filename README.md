@@ -113,7 +113,7 @@ src/
 │   │       └── spinner/spinner.tsx
 │   ├── login/page.tsx
 │   ├── signup/page.tsx
-│   ├── profile/page.tsx
+│   ├── dashboard/page.tsx
 │   ├── verify-email/page.tsx
 │   ├── forgot-password/page.tsx
 │   ├── reset-password/page.tsx

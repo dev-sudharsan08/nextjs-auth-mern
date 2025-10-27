@@ -20,7 +20,7 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value || '';
 
   if (token && isPublicRoute) {
-    return NextResponse.redirect(new URL('/profile', request.url));
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   if (!token && !isPublicRoute) {
