@@ -28,6 +28,7 @@ export async function POST(request: NextRequest) {
     user.password = hashedPassword;
     user.forgotPasswordToken = undefined;
     user.forgotPasswordTokenExpiry = undefined;
+    user.lastPasswordChangedAt = new Date();
 
     await user.save();
 

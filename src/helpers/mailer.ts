@@ -9,12 +9,12 @@ export default async function sendEmail({ email, emailType, userId }: any) {
     if (emailType === 'VERIFY') {
       await User.findByIdAndUpdate(userId, {
         emailVerificationToken: hashedToken,
-        emailVerificationTokenExpiry: Date.now() + 3600000,
+        emailVerificationTokenExpiry: Date.now() + 600,
       });
     } else if (emailType === 'RESET') {
       await User.findByIdAndUpdate(userId, {
         forgotPasswordToken: hashedToken,
-        forgotPasswordTokenExpiry: Date.now() + 3600000,
+        forgotPasswordTokenExpiry: Date.now() + 600,
       });
     }
 
@@ -27,7 +27,9 @@ export default async function sendEmail({ email, emailType, userId }: any) {
       },
     });
 
-    const verificationLink = `${process.env.DOMAIN}/verify-email?token=${hashedToken}`;
+    const verificationLink = emailType === 'VERIFY'
+      ? `${process.env.DOMAIN}/verify-email?token=${hashedToken}`
+      : `${process.env.DOMAIN}/reset-password?token=${hashedToken}`;
     const mailOptions = {
       from: 'sudharsan@gmail.com',
       to: email,
@@ -35,17 +37,17 @@ export default async function sendEmail({ email, emailType, userId }: any) {
         emailType === 'VERIFY' ? 'Verify your email' : 'Reset your password',
       html: `
     <div style="font-family: Arial, sans-serif; padding: 20px;">
-      <h2>${
-        emailType === 'VERIFY' ? 'Email Verification' : 'Password Reset'
-      }</h2>
+      <h2>${emailType === 'VERIFY' ? 'Email Verification' : 'Password Reset'
+        }</h2>
+
       <p>
-        ${
-          emailType === 'VERIFY'
-            ? 'Please click the link below to verify your email address:'
-            : 'Please click the link below to reset your password:'
+        ${emailType === 'VERIFY'
+          ? 'Please click the link below to verify your email address:'
+          : 'Please click the link below to reset your password:'
+
         }
       </p>
-      <a href="${verificationLink}" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px"</a>
+      <a href="${verificationLink}" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px">${emailType === 'VERIFY' ? 'Verify Email' : 'Reset Password'}</a>
     </div>
   `,
     };

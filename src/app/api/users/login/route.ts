@@ -15,13 +15,13 @@ export async function POST(request: NextRequest) {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 400 });
+      return NextResponse.json({ error: 'Email not found' }, { status: 400 });
     }
 
     const isPasswordMatch = await bcryptjs.compare(password, user.password);
 
     if (!isPasswordMatch) {
-      return NextResponse.json({ error: 'Invalid password' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid email or password' }, { status: 400 });
     }
 
     const token = jwt.sign(
@@ -43,12 +43,31 @@ export async function POST(request: NextRequest) {
         message: 'User logged in successfully',
         success: true,
         isLoginSuccess: true,
+        data: {
+          user: {
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            isVerified: user.isVerified,
+            createdAt: user.createdAt,
+          },
+        },
       },
       { status: 200 }
     );
 
-    response.cookies.set('token', token, { httpOnly: true, maxAge: 60 * 60 });
-    response.cookies.set('refreshToken', refreshToken, { httpOnly: true });
+    response.cookies.set('token', token, {
+      httpOnly: true,
+      maxAge: 60 * 60,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+    response.cookies.set('refreshToken', refreshToken, {
+      httpOnly: true,
+      maxAge: 5 * 24 * 60 * 60,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
 
     return response;
   } catch (error: unknown) {

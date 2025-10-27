@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/dbConfig/dbConfig';
 import User from '@/models/userModel';
-import jwt from 'jsonwebtoken';
+import jwt, { TokenExpiredError } from 'jsonwebtoken';
 
 connectDB();
 
@@ -47,7 +47,8 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json(
       {
         message: 'Token refreshed successfully',
-        success: true
+        success: true,
+        token: newAccessToken,
       },
       { status: 200 }
     );

@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { error: 'User not found' },
+        { error: 'No user found with this email. Please provide a valid email.' },
         { status: 400 }
       );
     }

@@ -3,14 +3,16 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
+import Link from 'next/link';
 import Spinner from '../components/reusable/spinner/spinner';
-import Alert from '../components/reusable/alert/alert';
+import { HiCheckCircle, HiOutlineArrowPath, HiExclamationCircle } from 'react-icons/hi2';
 
 const VerifyEmail = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loader, setLoader] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+  const [hasToken, setHasToken] = useState(false);
   const [{ isError, message }, setIsError] = useState({
     isError: false,
     message: '',
@@ -19,7 +21,14 @@ const VerifyEmail = () => {
   useEffect(() => {
     const token = searchParams.get('token');
     if (token) {
+      setHasToken(true);
       handleVerifyEmail(token);
+    } else {
+      setHasToken(false);
+      setIsError({
+        isError: true,
+        message: 'Verification token is missing. Please check the link from your email.',
+      });
     }
   }, [searchParams]);
 
@@ -28,7 +37,7 @@ const VerifyEmail = () => {
     setLoader(true);
     try {
       const response = await axios.post('/api/users/verifyemail', { token });
-      console.log(response);
+      
       if (response.data.data.isUserVerified) {
         setIsVerified(true);
         setTimeout(() => {
@@ -38,69 +47,92 @@ const VerifyEmail = () => {
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage =
-          error.response.data?.error || 'Sorry Something went wrong';
-        console.log(errorMessage);
+          error.response.data?.error || 'Verification failed. The token may be invalid or expired.';
         setIsError({ isError: true, message: errorMessage });
       } else if (error instanceof Error) {
-        console.log(error);
         setIsError({ isError: true, message: error.message });
       } else {
-        console.log('Unknown error', error);
-        setIsError({ isError: true, message: 'Sorry Something went wrong' });
+        setIsError({ isError: true, message: 'An unexpected error occurred during verification.' });
       }
     } finally {
       setLoader(false);
     }
   }
 
+  const getContent = () => {
+    if (loader && hasToken) {
+      return (
+        <div className='text-center'>
+          <div className='w-20 h-20 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg'>
+            <HiOutlineArrowPath className='w-10 h-10 text-white animate-spin' />
+          </div>
+          <h1 className='text-2xl sm:text-3xl font-bold text-white mb-4'>
+            Verifying Email...
+          </h1>
+          <p className='text-slate-400'>
+            Please wait while we validate your account.
+          </p>
+        </div>
+      );
+    }
+
+    if (isVerified) {
+      return (
+        <div className='text-center'>
+          <div className='w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg'>
+            <HiCheckCircle className='w-10 h-10 text-white' />
+          </div>
+          <h1 className='text-2xl sm:text-3xl font-bold text-white mb-4'>
+            Email Verified Successfully! 🎉
+          </h1>
+          <p className='text-slate-400 mb-6'>
+            Your email is now verified. You will be redirected to the login page shortly.
+          </p>
+          <div className='flex items-center justify-center space-x-2 text-sm text-slate-400'>
+            <div className='w-2 h-2 bg-green-400 rounded-full animate-pulse'></div>
+            <span>Redirecting to login page...</span>
+          </div>
+        </div>
+      );
+    }
+
+    if (isError) {
+      return (
+        <div className='text-center'>
+          <div className='w-20 h-20 bg-gradient-to-r from-red-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg'>
+            <HiExclamationCircle className='w-10 h-10 text-white' />
+          </div>
+          <h1 className='text-2xl sm:text-3xl font-bold text-white mb-4'>
+            Verification Failed
+          </h1>
+          <p className='text-slate-300 mb-6'>
+            {message || 'The verification link is invalid, expired, or something went wrong.'}
+          </p>
+          
+          <div className='space-y-3'>
+            <Link 
+              href='/login'
+              className='inline-flex items-center justify-center w-full px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.03] active:scale-100'
+            >
+              Go to Login Page
+            </Link>
+            <p className='text-sm text-slate-500 text-white'>
+                If you believe this is an error, please try logging in or contact support.
+            </p>
+          </div>
+        </div>
+      );
+    }
+    
+    return null;
+  };
+
   return (
     <>
       <Spinner loading={loader} />
-      <div className='flex items-center justify-center min-h-screen px-4'>
-        <div className='bg-white bg-opacity-10 backdrop-blur-lg shadow-2xl rounded-3xl p-6 sm:p-8 w-full max-w-md border border-white border-opacity-20 transition-all duration-300 hover:scale-[1.02] hover:bg-opacity-20'>
-          {isVerified ? (
-            <div className='text-center'>
-              <div className='w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6'>
-                <svg className='w-10 h-10 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
-                </svg>
-              </div>
-              <h1 className='text-2xl sm:text-3xl font-bold text-white mb-4'>
-                Email Verified Successfully!
-              </h1>
-              <p className='text-slate-300 mb-6'>
-                Your email has been verified. You can now log in to your account.
-              </p>
-              <div className='flex items-center justify-center space-x-2 text-sm text-slate-400'>
-                <div className='w-2 h-2 bg-green-400 rounded-full animate-pulse'></div>
-                <span>Redirecting to login page...</span>
-              </div>
-            </div>
-          ) : (
-            <div className='text-center'>
-              <div className='w-20 h-20 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-6'>
-                <svg className='w-10 h-10 text-white animate-spin' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' />
-                </svg>
-              </div>
-              <h1 className='text-2xl sm:text-3xl font-bold text-white mb-4'>
-                Verifying Email...
-              </h1>
-              <p className='text-slate-300'>
-                Please wait while we verify your email address.
-              </p>
-            </div>
-          )}
-
-          {isError && (
-            <div className='mt-4'>
-              <Alert
-                message={message}
-                type='error'
-                className='text-center'
-              />
-            </div>
-          )}
+      <div className='flex items-center justify-center px-4'>
+        <div className='bg-indigo-900/15 backdrop-blur-md shadow-2xl rounded-3xl p-6 sm:p-10 w-full max-w-md border border-indigo-700/50 transition-all duration-300 hover:scale-[1.01] shadow-indigo-900/20'>
+          {getContent()}
         </div>
       </div>
     </>

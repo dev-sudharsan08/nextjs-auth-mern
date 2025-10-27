@@ -13,7 +13,10 @@ export function middleware(request: NextRequest) {
     path === '/verify-email' ||
     path === '/forgot-password' ||
     path === '/reset-password' ||
-    path === '/';
+    path === '/' ||
+    path === '/features' ||
+    path === '/contact';
+
   const token = request.cookies.get('token')?.value || '';
 
   if (token && isPublicRoute) {
