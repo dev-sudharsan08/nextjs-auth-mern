@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { FaUser, FaChartBar, FaTasks, FaPlus, FaPencilAlt, FaTrashAlt, FaLock, FaInfoCircle, FaCheckCircle, FaExclamationTriangle, FaHourglassHalf, FaExclamationCircle } from 'react-icons/fa';
 import Spinner from '../components/reusable/spinner/spinner';
 import Alert from '../components/reusable/alert/alert';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
 interface User {
   _id: string;
@@ -34,7 +35,8 @@ export default function Dashboard() {
     title: '',
     description: '',
     priority: 'Medium' as 'Low' | 'Medium' | 'High',
-    dueDate: ''
+    dueDate: '',
+    status: 'To Do' as 'To Do' | 'In Progress' | 'Done',
   });
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [showAddTask, setShowAddTask] = useState(false);
@@ -81,11 +83,13 @@ export default function Dashboard() {
   async function handleAddTask(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsError({ isError: false, message: '' });
+    if (!newTask.title) return;
+
     setLoader(true);
     try {
       const response = await axios.post('/api/users/tasks', newTask);
       setTasks([response.data.task, ...tasks]);
-      setNewTask({ title: '', description: '', priority: 'Medium', dueDate: '' });
+      setNewTask({ title: '', description: '', priority: 'Medium', dueDate: '', status: 'To Do', });
       setShowAddTask(false);
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
@@ -101,22 +105,22 @@ export default function Dashboard() {
   async function handleUpdateTask(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsError({ isError: false, message: '' });
-    if (!editingTask) return;
+    if (!editingTask || !newTask.title) return;
 
     setLoader(true);
     try {
       const response = await axios.put(`/api/users/tasks/${editingTask._id}`, {
-        title: newTask.title,
-        description: newTask.description,
-        priority: newTask.priority,
-        dueDate: newTask.dueDate,
-        status: editingTask.status
+        title: newTask.title || editingTask.title,
+        description: newTask.description || editingTask.description,
+        priority: newTask.priority || editingTask.priority,
+        dueDate: newTask.dueDate || editingTask.dueDate,
+        status: newTask.status || editingTask.status,
       });
 
       setTasks(tasks.map(task =>
         task._id === editingTask._id ? response.data.task : task
       ));
-      setNewTask({ title: '', description: '', priority: 'Medium', dueDate: '' });
+      setNewTask({ title: '', description: '', priority: 'Medium', dueDate: '', status: 'To Do', });
       setEditingTask(null);
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
@@ -153,14 +157,15 @@ export default function Dashboard() {
       title: task.title,
       description: task.description,
       priority: task.priority,
-      dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : ''
+      dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : '',
+      status: task.status,
     });
     setShowAddTask(false);
   }
 
   function handleCancelEdit() {
     setEditingTask(null);
-    setNewTask({ title: '', description: '', priority: 'Medium', dueDate: '' });
+    setNewTask({ title: '', description: '', priority: 'Medium', dueDate: '', status: 'To Do', });
   }
 
   const getPriorityColor = (priority: string) => {
@@ -335,7 +340,7 @@ export default function Dashboard() {
             </button>
           </div>
           {(showAddTask || editingTask) && (
-            <form onSubmit={editingTask ? handleUpdateTask : handleAddTask} className='bg-opacity-5 backdrop-blur-sm p-6 rounded-2xl mb-6 border border-white border-opacity-10'>
+            <form onSubmit={editingTask ? handleUpdateTask : handleAddTask} className='bg-opacity-5 backdrop-blur-sm p-6 rounded-2xl mb-6 border border-white border-opacity-10' noValidate>
               <h3 className='text-xl font-semibold text-indigo-300 mb-4'>{editingTask ? 'Edit Task' : 'Create New Task'}</h3>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
                 <div>
@@ -346,16 +351,24 @@ export default function Dashboard() {
                     id='title'
                     name='title'
                     type='text'
-                    required
                     value={newTask.title}
                     onChange={(e) => { setNewTask({ ...newTask, title: e.target.value }); setIsError({ isError: false, message: '' }) }}
                     className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-opacity-10 backdrop-blur-sm placeholder-gray-400 text-white'
                     placeholder='Enter task title'
                   />
+                  {!newTask.title &&
+                    <div className='flex items-center mt-1 '>
+                      <HiOutlineExclamationCircle
+                        className='w-4 h-4 text-red-500 me-2 mb-0'
+                        aria-label="Error"
+                      />
+                      <span className='text-sm text-red-400'>Task title is required</span>
+                    </div>
+                  }
                 </div>
                 <div>
                   <label className='block text-sm font-medium text-white mb-2' htmlFor='priority'>
-                    Priority
+                    Priority <span className='text-red-400'>*</span>
                   </label>
                   <select
                     id='priority'
@@ -370,7 +383,7 @@ export default function Dashboard() {
                   </select>
                 </div>
               </div>
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-6'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
                 <div>
                   <label className='block text-sm font-medium text-white mb-2' htmlFor='description'>
                     Description
@@ -387,7 +400,7 @@ export default function Dashboard() {
                 </div>
                 <div>
                   <label className='block text-sm font-medium text-white mb-2' htmlFor='dueDate'>
-                    Due Date
+                    Due Date <span className='text-red-400'>*</span>
                   </label>
                   <input
                     id='dueDate'
@@ -398,6 +411,24 @@ export default function Dashboard() {
                     onChange={(e) => { setNewTask({ ...newTask, dueDate: e.target.value }); setIsError({ isError: false, message: '' }) }}
                     className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-opacity-10 backdrop-blur-sm text-white appearance-none date-icon-white'
                   />
+                </div>
+              </div>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-6'>
+                <div>
+                  <label className='block text-sm font-medium text-white mb-2' htmlFor='priority'>
+                    Status <span className='text-red-400'>*</span>
+                  </label>
+                  <select
+                    id='priority'
+                    name='priority'
+                    value={newTask.status}
+                    onChange={(e) => { setNewTask({ ...newTask, status: e.target.value as 'To Do' | 'In Progress' | 'Done' }); setIsError({ isError: false, message: '' }) }}
+                    className='w-full px-4 py-3 border border-white border-opacity-20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-opacity-10 backdrop-blur-sm text-white appearance-none pr-8'
+                  >
+                    <option className='bg-gray-800 text-white' value='To Do'>To Do</option>
+                    <option className='bg-gray-800 text-white' value='In Progress'>In Progress</option>
+                    <option className='bg-gray-800 text-white' value='Done'>Done</option>
+                  </select>
                 </div>
               </div>
               <div className='flex justify-end space-x-3'>

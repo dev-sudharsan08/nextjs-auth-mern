@@ -34,7 +34,7 @@ const Spinner: React.FC<SpinnerProps> = ({
         cssOverride={loaderStyle}
         aria-label='Loading Spinner'
         data-testid='loader'
-        title='hii'
+        title='Loading...'
       />
     </div>
   );
