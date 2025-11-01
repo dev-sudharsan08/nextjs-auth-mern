@@ -8,6 +8,13 @@ connectDB();
 export async function GET(request: NextRequest) {
   try {
     const userId = await getDataFromToken(request);
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Authentication required. Token missing or invalid.' },
+        { status: 401 }
+      );
+    }
+
     const tasks = await Task.find({ userId }).sort({ createdAt: -1 });
     return NextResponse.json({ tasks }, { status: 200 });
   } catch (error: any) {
@@ -18,6 +25,13 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const userId = await getDataFromToken(request);
+    if (!userId) {
+      return NextResponse.json(
+        { message: 'Authentication required. Token missing or invalid.' },
+        { status: 401 }
+      );
+    }
+
     const reqBody = await request.json();
     const { title, description, status, priority, dueDate } = reqBody;
 

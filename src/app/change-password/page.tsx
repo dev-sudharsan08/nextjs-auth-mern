@@ -195,10 +195,8 @@ export default function ChangePassword() {
         }, 2000);
       }
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response) {
-        const errorMessage =
-          error.response.data?.error || 'Something went wrong';
-        setIsError({ isError: true, message: errorMessage });
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push('/logout?reason=expired');
       } else {
         setIsError({
           isError: true,

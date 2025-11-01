@@ -8,6 +8,13 @@ connectDB();
 export async function GET(request: NextRequest) {
   try {
     const userId = await getDataFromToken(request);
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Authentication required. Token missing or invalid.' },
+        { status: 401 }
+      );
+    }
+
     const user = await User.findOne({ _id: userId }).select(
       '-password -refreshToken -emailVerificationToken -emailVerificationTokenExpiry -isAdmin -forgotPasswordToken -forgotPasswordTokenExpiry'
     );

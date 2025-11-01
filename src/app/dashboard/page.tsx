@@ -7,6 +7,7 @@ import { FaUser, FaChartBar, FaTasks, FaPlus, FaPencilAlt, FaTrashAlt, FaLock, F
 import Spinner from '../components/reusable/spinner/spinner';
 import Alert from '../components/reusable/alert/alert';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { useRouter } from 'next/navigation';
 
 interface User {
   _id: string;
@@ -28,6 +29,7 @@ interface Task {
 }
 
 export default function Dashboard() {
+  const router = useRouter();
   const [loader, setLoader] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -57,10 +59,8 @@ export default function Dashboard() {
       const response = await axios.get('/api/users/details');
       setUser(response.data.data);
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response) {
-        const errorMessage =
-          error.response.data?.error || 'Sorry Something went wrong';
-        setIsError({ isError: true, message: errorMessage });
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push('/logout?reason=expired');
       } else if (error instanceof Error) {
         setIsError({ isError: true, message: error.message });
       } else {
@@ -75,8 +75,14 @@ export default function Dashboard() {
     try {
       const response = await axios.get('/api/users/tasks');
       setTasks(response.data.tasks);
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push('/logout?reason=expired');
+      } else if (error instanceof Error) {
+        setIsError({ isError: true, message: error.message });
+      } else {
+        setIsError({ isError: true, message: 'Sorry Something went wrong' });
+      }
     }
   }
 
@@ -92,10 +98,8 @@ export default function Dashboard() {
       setNewTask({ title: '', description: '', priority: 'Medium', dueDate: '', status: 'To Do', });
       setShowAddTask(false);
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response) {
-        const errorMessage =
-          error.response.data?.error || 'Sorry Something went wrong';
-        setIsError({ isError: true, message: errorMessage });
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push('/logout?reason=expired');
       }
     } finally {
       setLoader(false);
@@ -123,10 +127,8 @@ export default function Dashboard() {
       setNewTask({ title: '', description: '', priority: 'Medium', dueDate: '', status: 'To Do', });
       setEditingTask(null);
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response) {
-        const errorMessage =
-          error.response.data?.error || 'Sorry Something went wrong';
-        setIsError({ isError: true, message: errorMessage });
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push('/logout?reason=expired');
       }
     } finally {
       setLoader(false);
@@ -141,10 +143,8 @@ export default function Dashboard() {
       await axios.delete(`/api/users/tasks/${taskId}`);
       setTasks(tasks.filter(task => task._id !== taskId));
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response) {
-        const errorMessage =
-          error.response.data?.error || 'Sorry Something went wrong';
-        setIsError({ isError: true, message: errorMessage });
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push('/logout?reason=expired');
       }
     } finally {
       setLoader(false);

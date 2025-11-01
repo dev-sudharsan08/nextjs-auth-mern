@@ -1,64 +1,35 @@
 'use client';
 
-import axios from 'axios';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { FaHome, FaBolt, FaEnvelope, FaSignInAlt, FaSignOutAlt, FaCheckCircle, FaBars, FaTimes } from 'react-icons/fa';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { FaHome, FaBolt, FaEnvelope, FaSignInAlt, FaSignOutAlt, FaBars, FaTimes } from 'react-icons/fa';
 import { HiBadgeCheck } from 'react-icons/hi';
 
 export default function Header() {
-  const router = useRouter();
-  const [loader, setLoader] = useState(false);
+  const pathName = usePathname()
+  const [isAuthenticated, setAuthenticated] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [{ isError, message }, setIsError] = useState({
-    isError: false,
-    message: '',
-  });
 
-  async function handleLogout() {
-    try {
-      setLoader(true);
-      const response = await axios.get('/api/users/logout', {});
-      console.log(response);
-      response?.data?.success && router.push('/login');
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response) {
-        const errorMessage =
-          error.response.data?.error || 'Sorry Something went wrong';
-        console.log(errorMessage);
-        setIsError({ isError: true, message: errorMessage });
-      } else if (error instanceof Error) {
-        console.log(error.message);
-        setIsError({ isError: true, message: error.message });
-      } else {
-        console.log('Unknown error', error);
-        setIsError({ isError: true, message: 'Sorry Something went wrong' });
+  useEffect(() => {
+    function readAuth() {
+      try {
+        const str = localStorage.getItem('isUserloggedIn');
+        const val = str ? JSON.parse(str) : false;
+        setAuthenticated(Boolean(val));
+      } catch (e) {
+        setAuthenticated(false);
       }
-    } finally {
-      setLoader(false);
     }
-  }
 
-  const isAuthenticated = true;
+    readAuth();
 
-  // if (loader) {
-  //   return (
-  //     <header className='bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white py-4 shadow-2xl sticky top-0 z-50 backdrop-blur-sm bg-opacity-95'>
-  //       <div className='max-w-7xl mx-auto px-6 flex justify-between items-center'>
-  //         <div className='flex items-center space-x-3'>
-  //           <div className='w-10 h-10 bg-white bg-opacity-20 rounded-xl flex items-center justify-center backdrop-blur-sm'>
-  //             <FaCheckCircle className='w-6 h-6 text-white' />
-  //           </div>
-  //           <h1 className='text-2xl font-bold tracking-wide bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent'>
-  //             TaskFlow
-  //           </h1>
-  //         </div>
-  //         <div className='animate-pulse bg-white bg-opacity-20 h-8 w-24 rounded'></div>
-  //       </div>
-  //     </header>
-  //   );
-  // }
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'isUserloggedIn') readAuth();
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, [pathName]);
 
   return (
     <header className='bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white py-4 shadow-2xl sticky top-0 z-50 backdrop-blur-sm bg-opacity-95'>
@@ -87,13 +58,13 @@ export default function Header() {
           </Link>
 
           {isAuthenticated ? (
-            <button
+            <Link
               className='flex items-center space-x-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 group'
-              onClick={handleLogout}
+              href='/logout'
             >
               <FaSignOutAlt className='w-4 h-4 group-hover:translate-x-1 transition-transform' />
               <span>Logout</span>
-            </button>
+            </Link>
           ) : (
             <Link
               href='/login'
@@ -107,20 +78,20 @@ export default function Header() {
 
         <div className='md:hidden flex items-center space-x-3'>
           {isAuthenticated ? (
-            <button
+            <Link
               className='flex items-center space-x-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 group'
-              onClick={handleLogout}
+              href='/logout'
             >
               <FaSignOutAlt className='w-4 h-4 group-hover:translate-x-1 transition-transform' />
               <span className='hidden sm:inline'>Logout</span>
-            </button>
+            </Link>
           ) : (
             <Link
               href='/login'
               className='flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 group'
             >
               <FaSignInAlt className='w-4 h-4 group-hover:translate-x-1 transition-transform' />
-              <span className='hidden sm:inline'>Login</span>
+              <span className='hidden sm:inline'>Sign In</span>
             </Link>
           )}
           <button

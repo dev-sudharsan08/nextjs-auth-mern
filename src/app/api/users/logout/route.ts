@@ -7,10 +7,17 @@ connectDB();
 
 export async function GET(request: NextRequest) {
   try {
-    const userId = await getDataFromToken(request);
+    let userId = null;
+    try {
+      userId = await getDataFromToken(request);
+    } catch (err: any) {
+      console.log('Token verification failed during logout:', err.message);
+      // Token not valid or missing, allow logout without DB update
+    }
 
-    // Clear refresh token from database
-    await User.findByIdAndUpdate(userId, { refreshToken: null });
+    if (userId) {
+      await User.findByIdAndUpdate(userId, { refreshToken: null });
+    }
 
     const response = NextResponse.json(
       {
@@ -20,7 +27,6 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     );
 
-    // Clear cookies
     response.cookies.set('token', '', {
       httpOnly: true,
       maxAge: 0,
@@ -36,6 +42,7 @@ export async function GET(request: NextRequest) {
 
     return response;
   } catch (error: any) {
+    console.error('Logout API error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

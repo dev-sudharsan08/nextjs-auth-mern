@@ -141,6 +141,7 @@ const Login = () => {
       console.log(response);
       if (response?.data?.isLoginSuccess) {
         setUserData({ email: '', password: '' });
+        localStorage.setItem('isUserloggedIn', JSON.stringify(true));
         router.push('/dashboard');
       }
     } catch (error: unknown) {

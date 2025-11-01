@@ -9,6 +9,13 @@ connectDB();
 export async function POST(request: NextRequest) {
   try {
     const userId = await getDataFromToken(request);
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Authentication required. Token missing or invalid.' },
+        { status: 401 }
+      );
+    }
+
     const { currentPassword, newPassword } = await request.json();
 
     if (!currentPassword || !newPassword) {
