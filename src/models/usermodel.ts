@@ -71,6 +71,10 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: Date.now
     },
+    profilePicture: {
+      type: String,
+      default: 'https://avatar.iran.liara.run/public/43'
+    }
   },
   { timestamps: true }
 );

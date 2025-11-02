@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import { FaUser, FaChartBar, FaTasks, FaPlus, FaPencilAlt, FaTrashAlt, FaLock, FaInfoCircle, FaCheckCircle, FaExclamationTriangle, FaHourglassHalf, FaExclamationCircle } from 'react-icons/fa';
+import { FaUser, FaChartBar, FaTasks, FaPlus, FaPencilAlt, FaTrashAlt, FaLock, FaInfoCircle, FaCheckCircle, FaExclamationTriangle, FaHourglassHalf, FaExclamationCircle, FaCamera } from 'react-icons/fa';
 import Spinner from '../components/reusable/spinner/spinner';
 import Alert from '../components/reusable/alert/alert';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
@@ -15,6 +15,7 @@ interface User {
   email: string;
   isVerified: boolean;
   createdAt: string;
+  profilePicture: string;
 }
 
 interface Task {
@@ -204,8 +205,12 @@ export default function Dashboard() {
         <div className='bg-opacity-10 backdrop-blur-lg rounded-3xl shadow-2xl p-6 sm:p-8 mb-8 border border-white border-opacity-20 transition-all duration-300 hover:scale-[1.005]'>
           <div className='flex flex-col sm:flex-row sm:items-center justify-between mb-6'>
             <div className='flex items-center space-x-4 mb-4 sm:mb-0'>
-              <div className='w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center'>
-                <FaUser className='w-6 h-6 text-white' />
+              <div className='relative w-20 h-20'>
+                <img
+                  src={user?.profilePicture || 'https://avatar.iran.liara.run/public/43'}
+                  alt="User Avatar"
+                  className='w-full h-full rounded-full object-cover border-4 border-purple-500/50 shadow-lg'
+                />
               </div>
               <div>
                 <h1 className='text-2xl sm:text-3xl font-bold text-white'>Dashboard</h1>

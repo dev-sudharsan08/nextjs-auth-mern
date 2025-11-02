@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     }
 
     const user = await User.findOne({ _id: userId }).select(
-      '-password -refreshToken -emailVerificationToken -emailVerificationTokenExpiry -isAdmin -forgotPasswordToken -forgotPasswordTokenExpiry'
+      '-password -refreshToken -emailVerificationToken -emailVerificationTokenExpiry -isAdmin -forgotPasswordToken -forgotPasswordTokenExpiry -__v -_id -updatedAt'
     );
 
     return NextResponse.json(
