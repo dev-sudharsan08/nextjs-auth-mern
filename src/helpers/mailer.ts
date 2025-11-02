@@ -9,12 +9,12 @@ export default async function sendEmail({ email, emailType, userId }: any) {
     if (emailType === 'VERIFY') {
       await User.findByIdAndUpdate(userId, {
         emailVerificationToken: hashedToken,
-        emailVerificationTokenExpiry: Date.now() + 600,
+        emailVerificationTokenExpiry: Date.now() + 10 * 60 * 1000,
       });
     } else if (emailType === 'RESET') {
       await User.findByIdAndUpdate(userId, {
         forgotPasswordToken: hashedToken,
-        forgotPasswordTokenExpiry: Date.now() + 600,
+        forgotPasswordTokenExpiry: Date.now() + 10 * 60 * 1000,
       });
     }
 

@@ -145,6 +145,7 @@ const Login = () => {
         router.push('/dashboard');
       }
     } catch (error: unknown) {
+      setLoader(false);
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage =
           error.response.data?.error || 'Login failed. Please check your credentials.';
@@ -159,8 +160,6 @@ const Login = () => {
       }
 
       setUserData((prev) => ({ ...prev }));
-    } finally {
-      setLoader(false);
     }
   }
 

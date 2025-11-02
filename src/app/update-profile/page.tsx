@@ -1,6 +1,6 @@
 'use client';
 
-import { useDeferredValue, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -50,6 +50,7 @@ export default function UpdateProfile() {
     message: '',
   });
   const [isSuccess, setIsSuccess] = useState(false);
+  const [emailVerificationSuccess, setEmailVerificationSuccess] = useState({ success: false, message: '', });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [isSubmit, setIsSubmit] = useState(false);
@@ -90,10 +91,14 @@ export default function UpdateProfile() {
     setLoader(true);
     try {
       const response = await axios.get('/api/users/details');
-      setUserDetails(response.data.data);
-      setFormData(response.data.data);
+      if (response.data.data) {
+        setUserDetails(response.data.data);
+        setFormData(response.data.data);
+      }
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push('/logout?reason=expired');
+      } else if (axios.isAxiosError(error) && error.response) {
         const errorMessage =
           error.response.data?.error || 'Sorry Something went wrong';
         setIsError({ isError: true, message: errorMessage });
@@ -115,19 +120,12 @@ export default function UpdateProfile() {
     setIsError({ isError: false, message: '' });
   };
 
-  // const isFormUnchanged = userDetails
-  //   ? Object.keys(userDetails).length !== Object.keys(formData).length || !(Object.keys(userDetails) as (keyof UserData)[]).some(
-  //       key => userDetails[key] !== formData[key]
-  //     )
-  //   : false;
-
   const isFormUnchanged = userDetails
   ? Object.keys(userDetails).length === Object.keys(formData).length &&
     !(Object.keys(userDetails) as (keyof UserData)[]).some(
       key => userDetails[key] !== formData[key]
     )
   : false;
-
 
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -192,6 +190,34 @@ export default function UpdateProfile() {
       setLoader(false);
     }
   };
+
+  async function handleVerifyEmail() {
+    setIsError({ isError: false, message: '' });
+    setLoader(true);
+    setIsSuccess(false);
+    setEmailVerificationSuccess({ success: false, message: '' });
+
+    try {
+      const response = await axios.post('/api/users/auth-email-verification');
+      if (response.data.data.isVerificationMailSent) {
+        setEmailVerificationSuccess({ success: response.data.data.isVerificationMailSent, message: response.data.data.message });
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push('/logout?reason=expired');
+      } else if (axios.isAxiosError(error) && error.response) {
+        const errorMessage =
+          error.response.data?.error || 'Sorry Something went wrong';
+        setIsError({ isError: true, message: errorMessage });
+      } else if (error instanceof Error) {
+        setIsError({ isError: true, message: error.message });
+      } else {
+        setIsError({ isError: true, message: 'Sorry Something went wrong' });
+      }
+    } finally {
+      setLoader(false);
+    }
+  }
 
     // const handlePreferenceToggle = (key: keyof PreferencesData) => {
   //   setPreferencesData(prev => ({ ...prev, [key]: !prev[key] }));
@@ -266,10 +292,11 @@ export default function UpdateProfile() {
               className='mb-6 animate-slide-down text-center'
             />
           )}
-          {(isSuccess || isAvatarSuccess) && (
+          {(isSuccess || isAvatarSuccess || emailVerificationSuccess.success) && (
             <Alert
               message={
                 isSuccess ? 'Profile updated!' :
+                  emailVerificationSuccess.success ? emailVerificationSuccess.message :
                   // isPreferencesSuccess ? 'Preferences saved!' :
                   // isPrivacySuccess ? 'Privacy settings saved!' :
                   //   isIntegrationsSuccess ? 'Integration status updated!' :
@@ -551,14 +578,15 @@ export default function UpdateProfile() {
                 </h2>
                 <div className='flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3'>
 
-                  {!userDetails?.isVerified && (
-                    <Link
-                      href='/verify-email'
+                  {!userDetails?.isVerified && !emailVerificationSuccess.success && (
+                    <button
+                      disabled={loader}
+                      onClick={handleVerifyEmail}
                       className='flex-1 flex items-center justify-center space-x-2 bg-yellow-600/30 hover:bg-yellow-600/50 text-yellow-300 font-semibold px-4 py-3 rounded-xl transition-colors disabled:opacity-50 border border-yellow-500/50'
                     >
                       <FaEnvelope className='w-4 h-4' />
                       <span>Verify Email Now</span>
-                    </Link>
+                    </button>
                   )}
 
                   <Link
@@ -584,6 +612,7 @@ export default function UpdateProfile() {
                   Permanently delete your account and all associated data.
                 </p>
                 <button
+                  disabled={loader}
                   onClick={() => setShowDeleteModal(true)}
                   className='w-full flex items-center justify-center space-x-3 bg-red-800/50 hover:bg-red-800 text-red-300 font-bold px-6 py-3 rounded-xl transition-colors duration-300 border border-red-700/50 hover:shadow-lg hover:shadow-red-800/30'
                 >

@@ -13,6 +13,7 @@ const VerifyEmail = () => {
   const [loader, setLoader] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [hasToken, setHasToken] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
   const [{ isError, message }, setIsError] = useState({
     isError: false,
     message: '',
@@ -30,6 +31,14 @@ const VerifyEmail = () => {
         message: 'Verification token is missing. Please check the link from your email.',
       });
     }
+
+    const str = localStorage.getItem('isUserloggedIn');
+    const val = str ? JSON.parse(str) : false;
+    if (val) {
+      setAuthenticated(Boolean(val));
+    } else {
+      setAuthenticated(false);
+    }
   }, [searchParams]);
 
   async function handleVerifyEmail(token: string) {
@@ -37,12 +46,12 @@ const VerifyEmail = () => {
     setLoader(true);
     try {
       const response = await axios.post('/api/users/verifyemail', { token });
-      
+
       if (response.data.data.isUserVerified) {
         setIsVerified(true);
         setTimeout(() => {
-          router.push('/login');
-        }, 3000);
+          authenticated ? router.push('/dashboard') : router.push('/login');
+        }, 1200);
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
@@ -86,11 +95,11 @@ const VerifyEmail = () => {
             Email Verified Successfully! 🎉
           </h1>
           <p className='text-slate-400 mb-6'>
-            Your email is now verified. You will be redirected to the login page shortly.
+            {`Your email is now verified. You will be redirected to the ${authenticated ? 'dashboard' : 'login'} page shortly.`}
           </p>
           <div className='flex items-center justify-center space-x-2 text-sm text-slate-400'>
             <div className='w-2 h-2 bg-green-400 rounded-full animate-pulse'></div>
-            <span>Redirecting to login page...</span>
+            <span>{`Redirecting to ${authenticated ? 'dashboard' : 'login'} page...`}</span>
           </div>
         </div>
       );
@@ -108,34 +117,31 @@ const VerifyEmail = () => {
           <p className='text-slate-300 mb-6'>
             {message || 'The verification link is invalid, expired, or something went wrong.'}
           </p>
-          
+
           <div className='space-y-3'>
-            <Link 
+            <Link
               href='/login'
               className='inline-flex items-center justify-center w-full px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.03] active:scale-100'
             >
-              Go to Login Page
+              {`Go to ${authenticated ? 'Dashboard' : 'Login'} Page`}
             </Link>
             <p className='text-sm text-slate-500 text-white'>
-                If you believe this is an error, please try logging in or contact support.
+              If you believe this is an error, please try logging in or contact support.
             </p>
           </div>
         </div>
       );
     }
-    
+
     return null;
   };
 
   return (
-    <>
-      <Spinner loading={loader} />
-      <div className='flex items-center justify-center px-4'>
-        <div className='bg-indigo-900/15 backdrop-blur-md shadow-2xl rounded-3xl p-6 sm:p-10 w-full max-w-md border border-indigo-700/50 transition-all duration-300 hover:scale-[1.01] shadow-indigo-900/20'>
-          {getContent()}
-        </div>
+    <div className='flex items-center justify-center px-4'>
+      <div className='bg-indigo-900/15 backdrop-blur-md shadow-2xl rounded-3xl p-6 sm:p-10 w-full max-w-md border border-indigo-700/50 transition-all duration-300 hover:scale-[1.01] shadow-indigo-900/20'>
+        {getContent()}
       </div>
-    </>
+    </div>
   );
 };
 
