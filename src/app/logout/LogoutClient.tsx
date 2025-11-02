@@ -59,7 +59,7 @@ const LogoutClient = ({ isExpired }: LogoutClientProps) => {
   }
 
   return (
-    <div className={`flex items-center justify-center text-white`}>
+    <div className={`flex items-center justify-center text-white px-4 sm:px-6`}>
       {loader && <Spinner loading={loader} />}
       <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 shadow-2xl max-w-sm w-full text-center">
         <div className="flex justify-center mb-6">

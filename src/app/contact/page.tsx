@@ -64,7 +64,7 @@ export default function Contact() {
 
   if (isSubmitted) {
     return (
-      <div className='flex items-center justify-center px-4'>
+      <div className='flex items-center justify-center px-4 sm:px-6'>
         <div className='bg-indigo-900/15 backdrop-blur-md shadow-2xl rounded-3xl p-8 sm:p-12 w-full max-w-md border border-indigo-700/50 text-center'>
           <div className='w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg'>
             <HiCheckCircle className='w-10 h-10 text-white' />

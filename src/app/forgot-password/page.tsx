@@ -8,6 +8,14 @@ import Alert from '../components/reusable/alert/alert';
 import { FiArrowLeft, FiCheckCircle, FiMail } from 'react-icons/fi';
 import { HiOutlineExclamationCircle, } from 'react-icons/hi2';
 
+interface FormErrors {
+  email?: string;
+}
+
+interface email {
+  email: string;
+}
+
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [loader, setLoader] = useState(false);
@@ -18,13 +26,13 @@ const ForgotPassword = () => {
   });
   const [formErrors, setFormErrors] = useState<FormErrors>({});
 
-  const validate = (data: email) => {
+  const validate = (value: string) => {
     const errors: FormErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!email.trim()) {
+    if (!value.trim()) {
       errors.email = 'Email address is required.';
-    } else if (!emailRegex.test(email)) {
+    } else if (!emailRegex.test(value)) {
       errors.email = 'Invalid email address format.';
     }
 
@@ -79,7 +87,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center px-4'>
+    <div className='flex flex-col items-center justify-center px-4 sm:px-6'>
       <Spinner loading={loader} />
       {isError && (
         <div className='flex justify-center'>

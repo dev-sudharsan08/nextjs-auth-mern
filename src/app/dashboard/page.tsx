@@ -8,6 +8,7 @@ import Spinner from '../components/reusable/spinner/spinner';
 import Alert from '../components/reusable/alert/alert';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
+import { IoWarningOutline } from 'react-icons/io5';
 
 interface User {
   _id: string;
@@ -47,6 +48,7 @@ export default function Dashboard() {
     isError: false,
     message: '',
   });
+  const [showDeleteModal, setShowDeleteModal] = useState({ show: false, taskId: '' });
 
   useEffect(() => {
     fetchUserDetails();
@@ -137,10 +139,10 @@ export default function Dashboard() {
   }
 
   async function handleDeleteTask(taskId: string) {
-    if (!confirm('Are you sure you want to delete this task?')) return;
     setIsError({ isError: false, message: '' });
     setLoader(true);
     try {
+      setShowDeleteModal({ show: false, taskId: '' })
       await axios.delete(`/api/users/tasks/${taskId}`);
       setTasks(tasks.filter(task => task._id !== taskId));
     } catch (error: unknown) {
@@ -149,6 +151,7 @@ export default function Dashboard() {
       }
     } finally {
       setLoader(false);
+      setShowDeleteModal({ show: false, taskId: '' })
     }
   }
 
@@ -507,7 +510,7 @@ export default function Dashboard() {
                           <FaPencilAlt className='w-4 h-4 group-hover:scale-110 transition-transform' />
                         </button>
                         <button
-                          onClick={() => handleDeleteTask(task._id)}
+                          onClick={() => setShowDeleteModal({ show: true, taskId: task._id })}
                           className='p-2 rounded-full text-red-300 hover:bg-red-500/20 transition-colors flex items-center justify-center group'
                           title='Delete Task'
                         >
@@ -522,6 +525,38 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      {showDeleteModal.show && (
+        <div
+          className='fixed inset-0 bg-black/70 z-50 flex items-center justify-center backdrop-blur-sm px-4 sm:px-6'
+          onClick={() => setShowDeleteModal({ show: false, taskId: '' })}
+        >
+          <div
+            className='bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full transform transition-all duration-300 ease-out scale-100'
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className='text-center'>
+              <IoWarningOutline className="mx-auto h-12 w-12 text-red-600" />
+              <h3 className='text-md font-bold text-gray-900 mt-3 mb-6'>
+                Are you sure you want to delete this task?
+              </h3>
+            </div>
+            <div className='flex justify-center space-x-3'>
+              <button
+                onClick={() => handleDeleteTask(showDeleteModal.taskId)}
+                className='px-4 py-2 text-sm font-semibold rounded-lg text-white bg-red-600 hover:bg-red-700 transition duration-150 shadow-md'
+              >
+                Yes, Delete
+              </button>
+              <button
+                onClick={() => setShowDeleteModal({ show: false, taskId: '' })}
+                className='px-4 py-2 text-sm font-semibold rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-150 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2'
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
