@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { FaUser, FaEnvelope, FaSave, FaTrashAlt, FaCamera, FaKey, FaShieldAlt, } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaSave, FaTrashAlt, FaCamera, FaKey, FaShieldAlt, FaSpinner, } from 'react-icons/fa';
 import Spinner from '../components/reusable/spinner/spinner';
 import Alert from '../components/reusable/alert/alert';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { IoWarningOutline } from 'react-icons/io5';
 
 interface UserData {
   username: string;
@@ -54,6 +55,7 @@ export default function UpdateProfile() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [isSubmit, setIsSubmit] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // const [isPrivacySuccess, setIsPrivacySuccess] = useState(false);
   // const [isPreferencesSuccess, setIsPreferencesSuccess] = useState(false);
@@ -121,11 +123,11 @@ export default function UpdateProfile() {
   };
 
   const isFormUnchanged = userDetails
-  ? Object.keys(userDetails).length === Object.keys(formData).length &&
+    ? Object.keys(userDetails).length === Object.keys(formData).length &&
     !(Object.keys(userDetails) as (keyof UserData)[]).some(
       key => userDetails[key] !== formData[key]
     )
-  : false;
+    : false;
 
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -155,16 +157,16 @@ export default function UpdateProfile() {
     if (!formData.username.trim() || formData.username.length < 4) return;
 
     const data = new FormData();
-    data.append('username', formData.username.trim()); 
-    
+    data.append('username', formData.username.trim());
+
     if (profileImageFile) {
-      data.append('profilePicture', profileImageFile); 
+      data.append('profilePicture', profileImageFile);
     }
 
     try {
       setLoader(true);
       const response = await axios.patch('/api/users/update-profile', data);
-      
+
       console.log(response);
       if (response.data.isProfileUpdated) {
         setIsSuccess(true);
@@ -219,7 +221,38 @@ export default function UpdateProfile() {
     }
   }
 
-    // const handlePreferenceToggle = (key: keyof PreferencesData) => {
+  const handleDeleteAccount = async () => {
+    setIsError({ isError: false, message: '' });
+    setLoader(true);
+    setIsSuccess(false);
+    setEmailVerificationSuccess({ success: false, message: '' });
+    setIsDeleting(true);
+
+    try {
+      const response = await axios.delete('/api/users/delete-account');
+      if (response.data.isDeleted) {
+        localStorage.removeItem('isUserloggedIn');
+        router.push('/');
+      }
+    } catch (error: unknown) {
+      setIsDeleting(false);
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push('/logout?reason=expired');
+      } else if (axios.isAxiosError(error) && error.response) {
+        const errorMessage =
+          error.response.data?.error || 'Sorry Something went wrong';
+        setIsError({ isError: true, message: errorMessage });
+      } else if (error instanceof Error) {
+        setIsError({ isError: true, message: error.message });
+      } else {
+        setIsError({ isError: true, message: 'Sorry Something went wrong' });
+      }
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  // const handlePreferenceToggle = (key: keyof PreferencesData) => {
   //   setPreferencesData(prev => ({ ...prev, [key]: !prev[key] }));
   // };
 
@@ -260,7 +293,7 @@ export default function UpdateProfile() {
   return (
     <>
       <Spinner loading={loader || avatarLoader} />
-      <div className='max-w-7xl mx-auto space-y-8'>
+      <div className='max-w-7xl mx-auto space-y-8 px-4 sm:px-6'>
         <div className='flex items-center justify-center pb-6 border-b border-white/10'>
           {/* <Link
             href='/dashboard'
@@ -297,10 +330,10 @@ export default function UpdateProfile() {
               message={
                 isSuccess ? 'Profile updated!' :
                   emailVerificationSuccess.success ? emailVerificationSuccess.message :
-                  // isPreferencesSuccess ? 'Preferences saved!' :
-                  // isPrivacySuccess ? 'Privacy settings saved!' :
-                  //   isIntegrationsSuccess ? 'Integration status updated!' :
-                      'Profile image uploaded!'
+                    // isPreferencesSuccess ? 'Preferences saved!' :
+                    // isPrivacySuccess ? 'Privacy settings saved!' :
+                    //   isIntegrationsSuccess ? 'Integration status updated!' :
+                    'Profile image uploaded!'
               }
               type='success'
               // icon={<FaCheckCircle className="w-5 h-5" />}
@@ -361,7 +394,7 @@ export default function UpdateProfile() {
                   </div>
                   {(!formData.username.trim() || formData.username.length < 4) && !loader &&
                     <div className='flex items-center mt-1 '>
-                      <HiOutlineExclamationCircle 
+                      <HiOutlineExclamationCircle
                         className='w-4 h-4 text-red-500 me-2 mb-0'
                         aria-label="Error"
                       />
@@ -379,7 +412,7 @@ export default function UpdateProfile() {
                       name='email'
                       value={userDetails?.email || ''}
                       disabled
-                      className='w-full pl-12 pr-4 py-3.5 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white/5 backdrop-blur-sm placeholder-gray-400 text-white text-base transition-colors duration-200 hover:border-white/30 cursor-not-allowed opacity-50' 
+                      className='w-full pl-12 pr-4 py-3.5 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white/5 backdrop-blur-sm placeholder-gray-400 text-white text-base transition-colors duration-200 hover:border-white/30 cursor-not-allowed opacity-50'
                       placeholder='your.email@example.com'
                     />
                   </div>
@@ -602,7 +635,6 @@ export default function UpdateProfile() {
                 </p>
               </div>
 
-              {/* Account Deletion Section */}
               <div className='pt-6 border-t border-white/10 space-y-4'>
                 <h2 className='text-xl font-bold text-indigo-300 mb-6 flex items-center space-x-3 border-b border-indigo-500/20 pb-2'>
                   <FaTrashAlt className='w-5 h-5' />
@@ -627,13 +659,64 @@ export default function UpdateProfile() {
         </div>
 
       </div>
-      {/* Account Deletion Confirmation Modal (Unchanged) */}
       {showDeleteModal && (
-        <div className='fixed inset-0 bg-black/70 z-50 flex items-center justify-center backdrop-blur-sm'>
-          {/* Modal content... */}
+        <div
+          className='fixed inset-0 bg-black/70 z-50 flex items-center justify-center backdrop-blur-sm px-4 sm:px-6'
+          onClick={!isDeleting ? () => setShowDeleteModal(false) : undefined}
+        >
+          <div
+            className='bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full transform transition-all duration-300 ease-out scale-100'
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className='text-center'>
+              <IoWarningOutline className="mx-auto h-12 w-12 text-red-600" />
+
+              <h3 className='text-lg font-bold text-gray-900 mt-2'>
+                Delete Account Permanently?
+              </h3>
+
+              <p className='text-sm text-gray-500 mt-2 mb-6'>
+                Are you absolutely sure you want to delete your profile? This action cannot be undone.
+              </p>
+            </div>
+            <div className='flex justify-center space-x-3'>
+              <button
+                onClick={handleDeleteAccount}
+                disabled={isDeleting}
+                className={`
+                    px-4 py-2 text-sm font-semibold rounded-lg text-white transition duration-150 shadow-md 
+                    ${isDeleting
+                    ? 'bg-red-400 cursor-not-allowed flex items-center'
+                    : 'bg-red-600 hover:bg-red-700'
+                  }
+                `}
+              >
+                {isDeleting ? (
+                  <div className='flex items-center'>
+                    <FaSpinner className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                    Deleting...
+                  </div>
+                ) : (
+                  'Yes, Delete'
+                )}
+              </button>
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                disabled={isDeleting}
+                className={`
+                    px-4 py-2 text-sm font-semibold rounded-lg text-gray-700 transition duration-150 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2
+                    ${isDeleting
+                    ? 'bg-gray-200 cursor-not-allowed opacity-70'
+                    : 'bg-gray-100 hover:bg-gray-200'
+                  }
+                `}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
       )}
-
     </>
   );
 }

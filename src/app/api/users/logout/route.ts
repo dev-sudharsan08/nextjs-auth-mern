@@ -27,18 +27,8 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     );
 
-    response.cookies.set('token', '', {
-      httpOnly: true,
-      maxAge: 0,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
-    });
-    response.cookies.set('refreshToken', '', {
-      httpOnly: true,
-      maxAge: 0,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
-    });
+   response.cookies.delete('token');
+   response.cookies.delete('refreshToken');  
 
     return response;
   } catch (error: any) {
