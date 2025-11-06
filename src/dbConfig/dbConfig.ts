@@ -10,10 +10,15 @@ const connectDB = async () => {
       dbName: process.env.MONGODB_NAME,
     });
     const db = mongoose.connection;
-    db.on('error', (err) => {
-      console.log(console, 'MongoDB connection error: ' + err);
-    });
-    db.once('connected', () => console.log('Connected to MongoDB'));
+    if (db.listenerCount('error') === 0) {
+      db.on('error', (err) => {
+        console.log('MongoDB connection error: ' + err);
+      });
+    }
+
+    if (db.listenerCount('connected') === 0) {
+      db.once('connected', () => console.log('Connected to MongoDB'));
+    }
   } catch (err) {
     console.error(err);
   }
