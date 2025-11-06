@@ -1,7 +1,7 @@
 import connectDB from '@/dbConfig/dbConfig';
 import uploadImageAndGetUrl from '@/helpers/cloudinaryUpload';
 import getDataFromToken from '@/helpers/getDataFromToken';
-import User from '@/models/userModel';
+import User from '../../../../models/userModel';
 import { NextRequest, NextResponse } from 'next/server';
 import { MongoServerError } from 'mongodb';
 
