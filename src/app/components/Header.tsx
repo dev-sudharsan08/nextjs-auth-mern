@@ -40,7 +40,7 @@ export default function Header() {
             <HiBadgeCheck className='text-indigo-400 w-6 h-6 drop-shadow-lg' />
           </span>
           <h1 className='text-xl sm:text-2xl font-bold tracking-wide bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent'>
-            TaskFlow
+            TaskRebel
           </h1>
         </Link>
 

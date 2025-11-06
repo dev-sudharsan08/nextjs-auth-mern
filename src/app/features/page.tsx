@@ -77,7 +77,7 @@ export default function Features() {
             Powerful Features
           </h1>
           <p className='text-xl sm:text-2xl text-slate-400 mb-10 max-w-3xl mx-auto'>
-            Discover the core capabilities that make TaskFlow the ultimate task management solution.
+            Discover the core capabilities that make TaskRebel the ultimate task management solution.
           </p>
           <div className='flex flex-col sm:flex-row gap-6 justify-center items-center'>
             <Link

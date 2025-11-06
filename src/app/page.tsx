@@ -68,7 +68,7 @@ const homeData = [
           <h1 className='text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent leading-tight'>
             Welcome to
             <span className='block bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'>
-              TaskFlow
+              TaskRebel
             </span>
           </h1>
           <p className='text-xl md:text-2xl text-slate-300 mb-8 leading-relaxed'>

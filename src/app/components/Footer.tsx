@@ -14,7 +14,7 @@ export default function Footer() {
               <div className='w-10 h-10 bg-white bg-opacity-20 rounded-xl flex items-center justify-center backdrop-blur-sm'>
                 <HiBadgeCheck className='text-indigo-400 w-6 h-6 drop-shadow-lg' />
               </div>
-              <h3 className='text-xl sm:text-2xl font-extrabold text-white tracking-wider'>TaskFlow</h3>
+              <h3 className='text-xl sm:text-2xl font-extrabold text-white tracking-wider'>TaskRebel</h3>
             </div>
             <p className='text-slate-400 text-sm leading-normal max-w-sm'>
               Your ultimate task management solution. Organize, prioritize, and achieve your goals with ease.
@@ -65,7 +65,7 @@ export default function Footer() {
 
         <div className='border-t border-slate-700/70 pt-8 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0'>
           <p className='text-slate-500 text-sm text-center sm:text-left'>
-            &copy; 2025 TaskFlow. All rights reserved. Built with <span className='text-red-500'>&hearts;</span> using Next.js
+            &copy; 2025 TaskRebel. All rights reserved. Built with <span className='text-red-500'>&hearts;</span> using Next.js
           </p>
           <div className='flex flex-wrap justify-center sm:justify-end space-x-6 text-sm font-medium'>
             <Link href='/' className='text-slate-400 hover:text-white transition-colors duration-200'>Privacy Policy</Link>

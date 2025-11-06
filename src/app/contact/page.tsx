@@ -113,7 +113,7 @@ export default function Contact() {
       icon: <HiOutlineEnvelope className='w-6 h-6 text-white' />,
       title: 'Email Us',
       description: 'Get in touch via email for support or inquiries.',
-      value: 'support@taskflow.com',
+      value: 'support@taskbebel.com',
       color: 'from-indigo-500 to-blue-500',
     },
     {

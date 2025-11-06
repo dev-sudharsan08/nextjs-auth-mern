@@ -233,7 +233,7 @@ const SignUp = () => {
               <HiOutlineUserPlus className='w-8 h-8 text-white' />
             </div>
             <h1 className='text-3xl sm:text-4xl font-extrabold mb-2 text-white tracking-tight leading-tight'>
-              Join TaskFlow
+              Join TaskRebel
             </h1>
             <p className='text-slate-400 text-sm sm:text-base'>Create your account and start organizing</p>
           </div>
