@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import {
   HiOutlineEnvelope,
   HiOutlinePhone,
@@ -10,18 +11,75 @@ import {
   HiCheckCircle,
 } from 'react-icons/hi2';
 
+type FormData = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+};
+
+type FormErrors = Partial<Record<keyof FormData, string>>;
+
 export default function Contact() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     subject: '',
     message: ''
   });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Partial<Record<keyof FormData, boolean>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/;
+
+  const validateField = (name: keyof FormData, value: string): string | undefined => {
+    switch (name) {
+      case 'name':
+        if (!value.trim()) return 'Name is required.';
+        if (value.trim().length < 2) return 'Please enter at least 2 characters.';
+        return undefined;
+      case 'email':
+        if (!value.trim()) return 'Email is required.';
+        if (!emailRegex.test(value.trim())) return 'Please enter a valid email address.';
+        return undefined;
+      case 'subject':
+        if (!value.trim()) return 'Subject is required.';
+        if (value.trim().length < 3) return 'Subject must be at least 3 characters.';
+        return undefined;
+      case 'message':
+        if (!value.trim()) return 'Message is required.';
+        if (value.trim().length < 10) return 'Message must be at least 10 characters.';
+        return undefined;
+      default:
+        return undefined;
+    }
+  };
+
+  const validateForm = (data: FormData) => {
+    const newErrors: FormErrors = {};
+    (Object.keys(data) as Array<keyof FormData>).forEach((key) => {
+      const err = validateField(key, data[key]);
+      if (err) newErrors[key] = err;
+    });
+    return newErrors;
+  };
+
+  const isFormValid = (errs: FormErrors) => Object.keys(errs).length === 0;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    setTouched({ name: true, email: true, subject: true, message: true });
+
+    const formErrors = validateForm(formData);
+    setErrors(formErrors);
+
+    if (!isFormValid(formErrors)) {
+      return;
+    }
+
     setIsSubmitting(true);
 
     await new Promise(resolve => setTimeout(resolve, 2000));
@@ -29,13 +87,25 @@ export default function Contact() {
     setIsSubmitted(true);
     setIsSubmitting(false);
     setFormData({ name: '', email: '', subject: '', message: '' });
+    setErrors({});
+    setTouched({});
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (touched[name as keyof FormData]) {
+      const fieldError = validateField(name as keyof FormData, value);
+      setErrors((prev) => ({ ...prev, [name]: fieldError }));
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    const fieldError = validateField(name as keyof FormData, value);
+    setErrors((prev) => ({ ...prev, [name]: fieldError }));
   };
 
   const contactInfo = [
@@ -100,56 +170,117 @@ export default function Contact() {
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
           <div className='bg-indigo-900/15 backdrop-blur-md rounded-3xl p-8 sm:p-10 border border-indigo-700/50 shadow-2xl shadow-indigo-900/20'>
             <h2 className='text-3xl font-bold text-white mb-8'>Send us a message</h2>
-            <form onSubmit={handleSubmit} className='space-y-6'>
+            <form onSubmit={handleSubmit} className='space-y-6' noValidate>
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
                 <div>
-                  <label className='block text-sm font-medium text-slate-300 mb-2'>Name *</label>
+                  <label className='block text-sm font-medium text-slate-300 mb-2'>
+                    Name <span className='text-red-400'>*</span>
+                  </label>
                   <input
                     type='text'
                     name='name'
                     required
+                    aria-required
+                    aria-invalid={!!errors.name}
+                    aria-describedby={errors.name ? 'name-error' : undefined}
                     value={formData.name}
                     onChange={handleChange}
-                    className='w-full px-4 py-3 border border-indigo-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-900/50 placeholder-slate-500 text-white transition-colors duration-200'
+                    onBlur={handleBlur}
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-900/50 placeholder-slate-500 text-white transition-colors duration-200 ${errors.name ? 'border-red-400' : 'border-indigo-700/50'}`}
                     placeholder='Your full name'
                   />
+                  {errors.name && touched.name && (
+
+                    <div className='flex items-center mt-1 '>
+                      <HiOutlineExclamationCircle
+                        className='w-4 h-4 text-red-500 me-2 mb-0'
+                        aria-label="Error"
+                      />
+                      <span className='text-sm text-red-400'>{errors.name}</span>
+                    </div>
+                  )}
                 </div>
                 <div>
-                  <label className='block text-sm font-medium text-slate-300 mb-2'>Email *</label>
+                  <label className='block text-sm font-medium text-slate-300 mb-2'>
+                    Email <span className='text-red-400'>*</span>
+                  </label>
                   <input
                     type='email'
                     name='email'
                     required
+                    aria-required
+                    aria-invalid={!!errors.email}
+                    aria-describedby={errors.email ? 'email-error' : undefined}
                     value={formData.email}
                     onChange={handleChange}
-                    className='w-full px-4 py-3 border border-indigo-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-900/50 placeholder-slate-500 text-white transition-colors duration-200'
+                    onBlur={handleBlur}
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-900/50 placeholder-slate-500 text-white transition-colors duration-200 ${errors.email ? 'border-red-400' : 'border-indigo-700/50'}`}
                     placeholder='your@email.com'
                   />
+                  {errors.email && touched.email && (
+                    <div className='flex items-center mt-1 '>
+                      <HiOutlineExclamationCircle
+                        className='w-4 h-4 text-red-500 me-2 mb-0'
+                        aria-label="Error"
+                      />
+                      <span className='text-sm text-red-400'>{errors.email}</span>
+                    </div>
+                  )}
                 </div>
               </div>
               <div>
-                <label className='block text-sm font-medium text-slate-300 mb-2'>Subject *</label>
+                <label className='block text-sm font-medium text-slate-300 mb-2'>
+                  Subject <span className='text-red-400'>*</span>
+                </label>
                 <input
                   type='text'
                   name='subject'
                   required
+                  aria-required
+                  aria-invalid={!!errors.subject}
+                  aria-describedby={errors.subject ? 'subject-error' : undefined}
                   value={formData.subject}
                   onChange={handleChange}
-                  className='w-full px-4 py-3 border border-indigo-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-900/50 placeholder-slate-500 text-white transition-colors duration-200'
+                  onBlur={handleBlur}
+                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-900/50 placeholder-slate-500 text-white transition-colors duration-200 ${errors.subject ? 'border-red-400' : 'border-indigo-700/50'}`}
                   placeholder='What is this about?'
                 />
+                {errors.subject && touched.subject && (
+                  <div className='flex items-center mt-1 '>
+                    <HiOutlineExclamationCircle
+                      className='w-4 h-4 text-red-500 me-2 mb-0'
+                      aria-label="Error"
+                    />
+                    <span className='text-sm text-red-400'>{errors.subject}</span>
+                  </div>
+                )}
               </div>
               <div>
-                <label className='block text-sm font-medium text-slate-300 mb-2'>Message *</label>
+                <label className='block text-sm font-medium text-slate-300 mb-2'>
+                  Message <span className='text-red-400'>*</span>
+                </label>
                 <textarea
                   name='message'
                   required
+                  aria-required
+                  aria-invalid={!!errors.message}
+                  aria-describedby={errors.message ? 'message-error' : undefined}
                   rows={6}
                   value={formData.message}
                   onChange={handleChange}
-                  className='w-full px-4 py-3 border border-indigo-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-900/50 placeholder-slate-500 text-white resize-none transition-colors duration-200'
+                  onBlur={handleBlur}
+                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-900/50 placeholder-slate-500 text-white resize-none transition-colors duration-200 ${errors.message ? 'border-red-400' : 'border-indigo-700/50'}`}
                   placeholder='Tell us more about your inquiry...'
                 />
+                {errors.message && touched.message && (
+                  <div className='flex items-center mt-1 '>
+                    <HiOutlineExclamationCircle
+                      className='w-4 h-4 text-red-500 me-2 mb-0'
+                      aria-label="Error"
+                    />
+                    <span className='text-sm text-red-400'>{errors.message}</span>
+                  </div>
+                )}
               </div>
               <button
                 type='submit'
