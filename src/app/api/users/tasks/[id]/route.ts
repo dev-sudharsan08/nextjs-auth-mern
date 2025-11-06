@@ -5,8 +5,12 @@ import getDataFromToken from '@/helpers/getDataFromToken';
 
 connectDB();
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, ctx: any) {
   try {
+    const params = await ctx.params;
+    if (!params?.id) {
+      return NextResponse.json({ error: 'Missing id parameter' }, { status: 400 });
+    }
     const userId = await getDataFromToken(request);
     const reqBody = await request.json();
     const { title, description, status, priority, dueDate } = reqBody;
@@ -43,8 +47,12 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, ctx: any) {
   try {
+    const params = await ctx.params;
+    if (!params?.id) {
+      return NextResponse.json({ error: 'Missing id parameter' }, { status: 400 });
+    }
     const userId = await getDataFromToken(request);
 
     const task = await Task.findOneAndDelete({ _id: params.id, userId });
