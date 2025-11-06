@@ -1,6 +1,5 @@
-import connectDB from '@/dbConfig/dbConfig';
-import User from '@/models/userModel';
 import { NextRequest, NextResponse } from 'next/server';
+import { connectDB, User } from '../../../../lib/paths';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/dbConfig/dbConfig';
-import User from '@/models/userModel';
+import { connectDB, User } from '../../../../lib/paths';
 import getDataFromToken from '@/helpers/getDataFromToken';
 import bcryptjs from 'bcryptjs';
 
