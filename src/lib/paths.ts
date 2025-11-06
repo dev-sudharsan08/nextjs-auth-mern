@@ -1,5 +1,5 @@
-import User from '../models/userModel';
-import connectDB from '../dbConfig/dbConfig';
+import User from './models/userModel';
+import connectDB from './config/dbConfig';
 import getDataFromToken from '../helpers/getDataFromToken';
 import sendEmail from '../helpers/mailer';
 import uploadImageAndGetUrl from '../helpers/cloudinaryUpload';
