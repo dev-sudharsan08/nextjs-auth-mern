@@ -37,10 +37,16 @@ export async function DELETE(request: NextRequest) {
 
     return response;
 
-  } catch (error: any) {
-    console.error("User deletion error:", error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json(
-      { error: 'An unexpected error occurred during deletion.' },
+      { error: 'An unexpected error occurred.' },
       { status: 500 }
     );
   }

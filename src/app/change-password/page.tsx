@@ -109,7 +109,7 @@ export default function ChangePassword() {
   });
   const [formErrors, setFormErrors] = useState<FormErrors>({});
 
-  const validate = (data: formData) => {
+  const validate = (formData: formData) => {
     const errors: FormErrors = {};
 
     if (!formData.currentPassword) {

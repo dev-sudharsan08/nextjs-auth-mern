@@ -10,9 +10,18 @@ export async function GET(request: NextRequest) {
     let userId = null;
     try {
       userId = await getDataFromToken(request);
-    } catch (err: any) {
-      console.log('Token verification failed during logout:', err.message);
-      // Token not valid or missing, allow logout without DB update
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return NextResponse.json(
+          { error: error.message },
+          { status: 400 }
+        );
+      }
+
+      return NextResponse.json(
+        { error: 'An unexpected error occurred.' },
+        { status: 500 }
+      );
     }
 
     if (userId) {
@@ -27,12 +36,21 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     );
 
-   response.cookies.delete('token');
-   response.cookies.delete('refreshToken');  
+    response.cookies.delete('token');
+    response.cookies.delete('refreshToken');
 
     return response;
-  } catch (error: any) {
-    console.error('Logout API error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(
+      { error: 'An unexpected error occurred.' },
+      { status: 500 }
+    );
   }
 }

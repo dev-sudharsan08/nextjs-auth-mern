@@ -143,7 +143,7 @@ export default function Contact() {
             Message Sent! 🎉
           </h1>
           <p className='text-slate-400 mb-6'>
-            Thank you for reaching out. Your inquiry has been successfully received. We'll get back to you within 24 hours.
+            {`Thank you for reaching out. Your inquiry has been successfully received. We'll get back to you within 24 hours.`}
           </p>
           <button
             onClick={() => setIsSubmitted(false)}
@@ -164,7 +164,7 @@ export default function Contact() {
             Get in Touch
           </h1>
           <p className='text-xl sm:text-2xl text-slate-400 mb-8 max-w-3xl mx-auto'>
-            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+            {`Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.`}
           </p>
         </div>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
@@ -305,7 +305,7 @@ export default function Contact() {
             <div>
               <h2 className='text-3xl font-bold text-white mb-6'>Contact Information</h2>
               <p className='text-slate-400 mb-8 leading-relaxed text-lg'>
-                We're here to help! Reach out to us through any of the channels below, and we'll get back to you as soon as possible.
+                {`We're here to help! Reach out to us through any of the channels below, and we'll get back to you as soon as possible.`}
               </p>
             </div>
             <div className='space-y-6'>
@@ -339,15 +339,15 @@ export default function Contact() {
           <div className='space-y-4'>
             <div>
               <h4 className='text-white font-semibold mb-1'>How quickly do you respond?</h4>
-              <p className='text-slate-400 text-sm'>We typically respond within **24 hours** during business days (Monday-Friday).</p>
+              <p className='text-slate-400 text-sm'>We typically respond within <strong>24 hours</strong> during business days (Monday-Friday).</p>
             </div>
             <div>
               <h4 className='text-white font-semibold mb-1'>Do you offer phone support?</h4>
-              <p className='text-slate-400 text-sm'>Yes, dedicated phone support is available for **Premium** and **Enterprise** plan users.</p>
+              <p className='text-slate-400 text-sm'>Yes, dedicated phone support is available for <strong>Premium and Enterprise</strong> plan users.</p>
             </div>
             <div>
               <h4 className='text-white font-semibold mb-1'>Can I schedule a demo?</h4>
-              <p className='text-slate-400 text-sm'>Absolutely! Fill out the contact form, and we'll reach out to schedule a personalized demo.</p>
+              <p className='text-slate-400 text-sm'>{`Absolutely! Fill out the contact form, and we'll reach out to schedule a personalized demo.`}</p>
             </div>
           </div>
         </div>

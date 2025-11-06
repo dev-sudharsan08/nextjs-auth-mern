@@ -12,10 +12,6 @@ interface FormErrors {
   email?: string;
 }
 
-interface email {
-  email: string;
-}
-
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [loader, setLoader] = useState(false);

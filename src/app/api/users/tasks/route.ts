@@ -17,8 +17,18 @@ export async function GET(request: NextRequest) {
 
     const tasks = await Task.find({ userId }).sort({ createdAt: -1 });
     return NextResponse.json({ tasks }, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json(
+      { error: 'An unexpected error occurred.' },
+      { status: 500 }
+    );
   }
 }
 
@@ -46,7 +56,17 @@ export async function POST(request: NextRequest) {
 
     const savedTask = await task.save();
     return NextResponse.json({ task: savedTask }, { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json(
+      { error: 'An unexpected error occurred.' },
+      { status: 500 }
+    );
   }
 }

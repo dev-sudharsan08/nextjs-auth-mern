@@ -3,6 +3,7 @@ import uploadImageAndGetUrl from '@/helpers/cloudinaryUpload';
 import getDataFromToken from '@/helpers/getDataFromToken';
 import User from '@/models/userModel';
 import { NextRequest, NextResponse } from 'next/server';
+import { MongoServerError } from 'mongodb';
 
 connectDB();
 
@@ -35,7 +36,7 @@ export async function PATCH(request: NextRequest) {
       newImageUrl = await uploadImageAndGetUrl(profilePictureFile);
       console.log('Cloudinary URL returned:', newImageUrl);
       if (!newImageUrl || typeof newImageUrl !== 'string') {
-        throw new Error("Failed to get a valid URL from upload helper."); 
+        throw new Error("Failed to get a valid URL from upload helper.");
       }
 
       updateFields.profilePicture = newImageUrl;
@@ -63,19 +64,21 @@ export async function PATCH(request: NextRequest) {
       },
       { status: 200 }
     );
-  } catch (error: any) {
-    if (error.code === 11000) {
+  } catch (error: unknown) {
+    if (error instanceof MongoServerError && error.code === 11000) {
       return NextResponse.json(
         { error: 'Username is already taken. Please choose another.' },
         { status: 400 }
       );
-    } else if (error instanceof Error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    } else {
-      return NextResponse.json(
-        { error: 'An unknown error occurred' },
-        { status: 500 }
-      );
     }
+
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    return NextResponse.json(
+      { error: 'An unknown error occurred' },
+      { status: 500 }
+    );
   }
 }

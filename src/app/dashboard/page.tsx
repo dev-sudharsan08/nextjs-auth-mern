@@ -3,12 +3,13 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import { FaUser, FaChartBar, FaTasks, FaPlus, FaPencilAlt, FaTrashAlt, FaLock, FaInfoCircle, FaCheckCircle, FaExclamationTriangle, FaHourglassHalf, FaExclamationCircle, FaCamera } from 'react-icons/fa';
+import { FaUser, FaChartBar, FaTasks, FaPlus, FaPencilAlt, FaTrashAlt, FaLock, FaInfoCircle, FaCheckCircle, FaExclamationTriangle, FaHourglassHalf, FaExclamationCircle } from 'react-icons/fa';
 import Spinner from '../components/reusable/spinner/spinner';
 import Alert from '../components/reusable/alert/alert';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
 import { IoWarningOutline } from 'react-icons/io5';
+import Image from 'next/image';
 
 interface User {
   _id: string;
@@ -53,6 +54,7 @@ export default function Dashboard() {
   useEffect(() => {
     fetchUserDetails();
     fetchTasks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function fetchUserDetails() {
@@ -209,9 +211,11 @@ export default function Dashboard() {
           <div className='flex flex-col sm:flex-row sm:items-center justify-between mb-6'>
             <div className='flex items-center space-x-4 mb-4 sm:mb-0'>
               <div className='relative w-20 h-20'>
-                <img
+                <Image
                   src={user?.profilePicture || 'https://avatar.iran.liara.run/public/43'}
                   alt="User Avatar"
+                  width={100}
+                  height={100}
                   className='w-full h-full rounded-full object-cover border-4 border-purple-500/50 shadow-lg'
                 />
               </div>

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import Link from 'next/link';
-import Spinner from '../components/reusable/spinner/spinner';
 import { HiCheckCircle, HiOutlineArrowPath, HiExclamationCircle } from 'react-icons/hi2';
 
 const VerifyEmail = () => {
@@ -39,6 +38,7 @@ const VerifyEmail = () => {
     } else {
       setAuthenticated(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   async function handleVerifyEmail(token: string) {
@@ -50,7 +50,11 @@ const VerifyEmail = () => {
       if (response.data.data.isUserVerified) {
         setIsVerified(true);
         setTimeout(() => {
-          authenticated ? router.push('/dashboard') : router.push('/login');
+          if (authenticated) {
+            router.push('/dashboard');
+          } else {
+            router.push('/login');
+          }
         }, 1200);
       }
     } catch (error: unknown) {

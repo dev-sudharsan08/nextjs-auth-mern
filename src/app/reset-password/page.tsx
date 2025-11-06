@@ -108,7 +108,7 @@ const ResetPassword = () => {
 
   const token = searchParams.get('token');
 
-  const validate = (data: password) => {
+  const validate = (password: password) => {
     const errors: FormErrors = {};
 
     if (!password.newPassword) {

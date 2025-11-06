@@ -18,14 +18,15 @@ export default function Header() {
         const val = str ? JSON.parse(str) : false;
         setAuthenticated(Boolean(val));
       } catch (e) {
+        console.error('Error reading authentication status from localStorage:', e);
         setAuthenticated(false);
       }
     }
 
     readAuth();
 
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === 'isUserloggedIn') readAuth();
+    const onStorage = (_e: StorageEvent) => {
+      if (_e.key === 'isUserloggedIn') readAuth();
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);

@@ -14,7 +14,7 @@ interface LogoutClientProps {
 const LogoutClient = ({ isExpired }: LogoutClientProps) => {
   const router = useRouter();
   const [loader, setLoader] = useState(true);
-  const [{ isError, message }, setIsError] = useState({
+  const [, setIsError] = useState({
     isError: false,
     message: '',
   });

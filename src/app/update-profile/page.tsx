@@ -9,6 +9,7 @@ import Spinner from '../components/reusable/spinner/spinner';
 import Alert from '../components/reusable/alert/alert';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { IoWarningOutline } from 'react-icons/io5';
+import Image from 'next/image';
 
 interface UserData {
   username: string;
@@ -86,6 +87,7 @@ export default function UpdateProfile() {
 
   useEffect(() => {
     fetchUserDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function fetchUserDetails() {
@@ -353,9 +355,11 @@ export default function UpdateProfile() {
               </h2>
               <div className='flex items-center space-x-4 mb-8 border-b border-white/10 pb-6'>
                 <div className='relative w-20 h-20'>
-                  <img
+                  <Image
                     src={formData.previewProfilePicture || userDetails?.profilePicture || 'https://avatar.iran.liara.run/public/43'}
                     alt="User Avatar"
+                    width={100}
+                    height={100}
                     className='w-full h-full rounded-full object-cover border-4 border-purple-500/50 shadow-lg'
                   />
                   <label

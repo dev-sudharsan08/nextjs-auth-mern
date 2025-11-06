@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/dbConfig/dbConfig';
 import User from '@/models/userModel';
-import jwt, { TokenExpiredError } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 connectDB();
+
+interface JwtPayload {
+  userId: string;
+  email: string;
+  iat?: number;
+  exp?: number;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,7 +21,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify refresh token
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!) as any;
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!) as JwtPayload;
 
     // Find user and verify refresh token
     const user = await User.findOne({
@@ -68,7 +75,17 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-  } catch (error: any) {
-    return NextResponse.json({ error: 'Invalid or expired refresh token' }, { status: 401 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json(
+      { error: 'An unexpected error occurred.' },
+      { status: 500 }
+    );
   }
 }
