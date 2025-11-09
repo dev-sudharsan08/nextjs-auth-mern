@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import { FaUser, FaChartBar, FaTasks, FaPlus, FaPencilAlt, FaTrashAlt, FaLock, FaInfoCircle, FaCheckCircle, FaExclamationTriangle, FaHourglassHalf, FaExclamationCircle } from 'react-icons/fa';
+import { FaUser, FaChartBar, FaTasks, FaPlus, FaPencilAlt, FaTrashAlt, FaLock, FaCheckCircle, FaExclamationTriangle, FaHourglassHalf, FaExclamationCircle, FaTimes } from 'react-icons/fa';
 import Spinner from '../components/reusable/spinner/spinner';
 import Alert from '../components/reusable/alert/alert';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
@@ -224,7 +224,7 @@ export default function Dashboard() {
                 <p className='text-gray-200 text-sm'>Welcome back, {user?.username}!</p>
               </div>
             </div>
-            <div className='flex items-center space-x-4'>
+            <div className='flex items-center space-x-3 sm:space-x-4'>
               <span className={`px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1 ${user?.isVerified
                 ? 'bg-green-500/20 text-green-300 border border-green-400/50'
                 : 'bg-red-500/20 text-red-300 border border-red-400/50'
@@ -244,7 +244,7 @@ export default function Dashboard() {
               {/* {user?.isVerified ? ( */}
               <Link
                 href='/change-password'
-                className='px-4 py-1.5 bg-gradient-to-r from-blue-500/30 to-indigo-500/30 text-white border border-indigo-400/50 rounded-full text-sm font-medium hover:from-blue-600/40 hover:to-indigo-600/40 transition-all duration-300 flex items-center space-x-1 shadow-md hover:shadow-indigo-500/30'
+                className='px-3 py-1.5 bg-gradient-to-r from-blue-500/30 to-indigo-500/30 text-white border border-indigo-400/50 rounded-full text-sm font-medium hover:from-blue-600/40 hover:to-indigo-600/40 transition-all duration-300 flex items-center space-x-1 shadow-md hover:shadow-indigo-500/30'
               >
                 <FaLock className='w-3 h-3' />
                 <span>Change Password</span>
@@ -262,23 +262,29 @@ export default function Dashboard() {
           </div>
           {user && (
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
-              <div className='bg-opacity-5 backdrop-blur-sm rounded-2xl p-6 border border-cyan-600 border-opacity-10'>
+              <div className='bg-opacity-5 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-cyan-600 border-opacity-10'>
                 <h3 className='text-lg font-semibold text-white mb-4 flex items-center space-x-2'>
                   <FaUser className='w-5 h-5 text-indigo-400' />
                   <span>User Information</span>
                 </h3>
                 <div className='space-y-3'>
-                  <div className='flex items-center space-x-3'>
-                    <span className='text-gray-300 font-medium'>Username:</span>
-                    <span className='text-white'>{user.username}</span>
+                  <div className='flex items-center space-x-3 min-w-0'>
+                    <span className='text-gray-300 font-medium flex-shrink-0'>Username:</span>
+                    <span className='text-white flex-1 min-w-0 truncate max-w-[320px]' title={user.username}>
+                      {user.username}
+                    </span>
                   </div>
-                  <div className='flex items-center space-x-3'>
-                    <span className='text-gray-300 font-medium'>Email:</span>
-                    <span className='text-white'>{user.email}</span>
+                  <div className='flex items-center space-x-3 min-w-0'>
+                    <span className='text-gray-300 font-medium flex-shrink-0'>Email:</span>
+                    <span className='text-white flex-1 min-w-0 truncate max-w-[320px]' title={user.email}>
+                      {user.email}
+                    </span>
                   </div>
-                  <div className='flex items-center space-x-3'>
-                    <span className='text-gray-300 font-medium'>Member since:</span>
-                    <span className='text-white'>{new Date(user.createdAt).toLocaleDateString()}</span>
+                  <div className='flex items-center space-x-3 min-w-0'>
+                    <span className='text-gray-300 font-medium flex-shrink-0'>Member since:</span>
+                    <span className='text-white flex-1 min-w-0 truncate max-w-[320px]'>
+                      {new Date(user.createdAt).toLocaleDateString()}
+                    </span>
                   </div>
                 </div>
                 <div className='mt-6 pt-4 border-t border-white/10'>
@@ -291,7 +297,7 @@ export default function Dashboard() {
                   </Link>
                 </div>
               </div>
-              <div className='bg-opacity-5 backdrop-blur-sm rounded-2xl p-6 border border-cyan-600 border-opacity-10'>
+              <div className='bg-opacity-5 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-cyan-600 border-opacity-10'>
                 <h3 className='text-lg font-semibold text-white mb-4 flex items-center space-x-2'>
                   <FaChartBar className='w-5 h-5 text-purple-400' />
                   <span>Quick Stats</span>
@@ -346,13 +352,12 @@ export default function Dashboard() {
               }}
               className='bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center space-x-2'
             >
-              {(editingTask || showAddTask) ? <FaInfoCircle className='w-4 h-4' /> : <FaPlus className='w-4 h-4' />}
-              <span className='hidden sm:inline'>{editingTask ? 'Cancel Edit' : (showAddTask ? 'Close Form' : 'Add New Task')}</span>
-              <span className='sm:hidden'>{editingTask ? 'Cancel' : (showAddTask ? 'Close' : 'Add')}</span>
+              {(editingTask || showAddTask) ? <FaTimes className='w-4 h-4' /> : <FaPlus className='w-4 h-4' />}
+              <span className='sm:inline'>{editingTask ? 'Cancel Edit' : (showAddTask ? 'Close Form' : 'Add New Task')}</span>
             </button>
           </div>
           {(showAddTask || editingTask) && (
-            <form onSubmit={editingTask ? handleUpdateTask : handleAddTask} className='bg-opacity-5 backdrop-blur-sm p-6 rounded-2xl mb-6 border border-white border-opacity-10' noValidate>
+            <form onSubmit={editingTask ? handleUpdateTask : handleAddTask} className='bg-opacity-5 backdrop-blur-sm p-4 sm:p-6 rounded-2xl mb-6 border border-white border-opacity-10' noValidate>
               <h3 className='text-xl font-semibold text-indigo-300 mb-4'>{editingTask ? 'Edit Task' : 'Create New Task'}</h3>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
                 <div>
@@ -443,11 +448,11 @@ export default function Dashboard() {
                   </select>
                 </div>
               </div>
-              <div className='flex justify-end space-x-3'>
+              <div className='flex flex-col sm:flex-row sm:justify-end space-x-3 my-3 sm:my-0'>
                 <button
                   type='button'
                   onClick={editingTask ? handleCancelEdit : () => setShowAddTask(false)}
-                  className='px-6 py-2 bg-gray-600/20 text-gray-300 border border-gray-400/30 rounded-lg hover:bg-gray-600/40 transition duration-200'
+                  className='px-6 py-2 bg-gray-600/20 text-gray-300 border border-gray-400/30 rounded-lg hover:bg-gray-600/40 transition duration-200 mb-3 sm:mb-0 mr-0 sm:mr-3'
                 >
                   Cancel
                 </button>
@@ -469,7 +474,7 @@ export default function Dashboard() {
               tasks.map((task) => (
                 <div
                   key={task._id}
-                  className='bg-white/15 backdrop-blur-sm rounded-xl p-5 border border-white/20 transition-all duration-300 hover:border-indigo-400/50 hover:shadow-xl'
+                  className='bg-white/15 backdrop-blur-sm rounded-xl pl-5 pr-2 py-5 sm:p-5 border border-white/20 transition-all duration-300 hover:border-indigo-400/50 hover:shadow-xl'
                 >
                   {task.priority === 'High' && (
                     <div className='absolute top-0 left-0 bottom-0 w-1 bg-red-500 rounded-l-xl'></div>
