@@ -485,47 +485,45 @@ export default function Dashboard() {
                   {task.priority === 'Low' && (
                     <div className='absolute top-0 left-0 bottom-0 w-1 bg-green-500 rounded-l-xl'></div>
                   )}
-                  <div className='flex items-start justify-between'>
-                    <div className='flex-1 pr-4'>
-                      <h3 className='text-xl font-bold text-white mb-1.5'>{task.title}</h3>
-                      {task.description && (
-                        <p className='text-indigo-200 text-sm mb-4 line-clamp-2'>{task.description}</p>
-                      )}
-                      <div className='flex flex-wrap items-center gap-3 mt-2'>
-                        <span className={`px-3 py-1 rounded-lg text-xs font-semibold uppercase tracking-wider ${getStatusColor(task.status)}`}>
-                          {task.status}
-                        </span>
-                        <span className={`px-3 py-1 rounded-lg text-xs font-semibold uppercase tracking-wider ${getPriorityColor(task.priority)}`}>
-                          {task.priority} Priority
-                        </span>
-                        {task.dueDate && (
-                          <span className='text-sm text-indigo-300 flex items-center space-x-1'>
-                            <FaHourglassHalf className='w-3 h-3 text-indigo-400' />
-                            <span>Due: {new Date(task.dueDate).toLocaleDateString()}</span>
-                          </span>
-                        )}
-                      </div>
+                  <div className='flex items-start justify-between mb-3'>
+                    <div className='text-xs text-gray-400'>
+                      Created: {new Date(task.createdAt).toLocaleDateString()}
                     </div>
-                    <div className='flex flex-col items-end space-y-3 pt-1'>
-                      <div className='text-xs text-gray-400'>
-                        Created: {new Date(task.createdAt).toLocaleDateString()}
-                      </div>
-                      <div className='flex space-x-2'>
-                        <button
-                          onClick={() => handleEditTask(task)}
-                          className='p-2 rounded-full text-blue-300 hover:bg-blue-500/20 transition-colors flex items-center justify-center group'
-                          title='Edit Task'
-                        >
-                          <FaPencilAlt className='w-4 h-4 group-hover:scale-110 transition-transform' />
-                        </button>
-                        <button
-                          onClick={() => setShowDeleteModal({ show: true, taskId: task._id })}
-                          className='p-2 rounded-full text-red-300 hover:bg-red-500/20 transition-colors flex items-center justify-center group'
-                          title='Delete Task'
-                        >
-                          <FaTrashAlt className='w-4 h-4 group-hover:scale-110 transition-transform' />
-                        </button>
-                      </div>
+                    <div className='flex items-start space-x-3'>
+                      <button
+                        onClick={() => handleEditTask(task)}
+                        className='rounded-full text-blue-300 hover:bg-blue-500/20 transition-colors flex items-center justify-center group'
+                        title='Edit Task'
+                      >
+                        <FaPencilAlt className='w-4 h-4 group-hover:scale-110 transition-transform' />
+                      </button>
+                      <button
+                        onClick={() => setShowDeleteModal({ show: true, taskId: task._id })}
+                        className='rounded-full text-red-300 hover:bg-red-500/20 transition-colors flex items-center justify-center group'
+                        title='Delete Task'
+                      >
+                        <FaTrashAlt className='w-4 h-4 group-hover:scale-110 transition-transform' />
+                      </button>
+                    </div>
+                  </div>
+                  <div className='pr-4'>
+                    <h3 className='text-xl font-bold text-white mb-1.5'>{task.title}</h3>
+                    {task.description && (
+                      <p className='text-indigo-200 text-sm mb-4 line-clamp-2'>{task.description}</p>
+                    )}
+                    <div className='flex flex-wrap items-center gap-3 mt-2'>
+                      <span className={`px-3 py-1 rounded-lg text-xs font-semibold uppercase tracking-wider ${getStatusColor(task.status)}`}>
+                        {task.status}
+                      </span>
+                      <span className={`px-3 py-1 rounded-lg text-xs font-semibold uppercase tracking-wider ${getPriorityColor(task.priority)}`}>
+                        {task.priority} Priority
+                      </span>
+                      {task.dueDate && (
+                        <span className='text-sm text-indigo-300 flex items-center space-x-2'>
+                          <FaHourglassHalf className='w-3 h-3 text-indigo-400' />
+                          <span>Due: {new Date(task.dueDate).toLocaleDateString()}</span>
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -536,7 +534,7 @@ export default function Dashboard() {
       </div>
       {showDeleteModal.show && (
         <div
-          className='fixed inset-0 bg-black/70 z-50 flex items-center justify-center backdrop-blur-sm sm:px-6'
+          className='fixed inset-0 bg-black/70 z-50 flex items-center justify-center backdrop-blur-sm px-4 sm:px-6'
           onClick={() => setShowDeleteModal({ show: false, taskId: '' })}
         >
           <div

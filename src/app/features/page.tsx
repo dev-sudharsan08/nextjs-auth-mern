@@ -73,10 +73,10 @@ export default function Features() {
    <div className='sm:px-6'>
       <div className='max-w-7xl mx-auto'>
         <div className='text-center mb-16'>
-          <h1 className='text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent'>
+          <h1 className='text-3xl sm:text-5xl lg:text-6xl font-extrabold mb-6 bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent'>
             Powerful Features
           </h1>
-          <p className='text-xl sm:text-2xl text-slate-400 mb-10 max-w-3xl mx-auto'>
+          <p className='text-md sm:text-2xl text-slate-400 mb-10 max-w-3xl mx-auto'>
             Discover the core capabilities that make TaskRebel the ultimate task management solution.
           </p>
           <div className='flex flex-col sm:flex-row gap-6 justify-center items-center'>
@@ -100,7 +100,7 @@ export default function Features() {
             </Link>
           </div>
         </div>
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-6 mb-20 p-8 bg-indigo-900/10 rounded-3xl border border-indigo-700/50 shadow-2xl shadow-indigo-900/20'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-6 mb-10 sm:mb-20 p-2 sm:p-8 bg-indigo-900/10 rounded-3xl border border-indigo-700/50 shadow-2xl shadow-indigo-900/20'>
           {features.map((feature, index) => (
             <div
               key={index}
@@ -117,19 +117,19 @@ export default function Features() {
             </div>
           ))}
         </div>
-         <div className='mt-20 grid grid-cols-1 md:grid-cols-4 gap-6 text-center max-w-6xl mx-auto'>
+         <div className='mt-10 sm:mt-20 grid grid-cols-1 md:grid-cols-4 gap-6 text-center max-w-6xl mx-auto'>
           {features2.map((item, index) => (
             <div key={index} className='bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10 shadow-lg transition-all hover:border-indigo-500/50 hover:shadow-indigo-500/30 duration-500'>
-              <div className='text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 mb-2'>{item.title}</div>
+              <div className='text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 mb-2'>{item.title}</div>
               <div className='text-slate-200 text-base font-medium uppercase tracking-wider'>{item.text}</div>
             </div>
           ))}
         </div>
         <div className='text-center mt-20'>
-          <h2 className='text-3xl sm:text-4xl font-extrabold text-white mb-6'>
+          <h2 className='text-2xl sm:text-4xl font-extrabold text-white mb-6'>
             Ready to Boost Your Productivity?
           </h2>
-          <p className='text-xl text-slate-400 mb-10 max-w-2xl mx-auto'>
+          <p className='text-md sm:text-xl text-slate-400 mb-10 max-w-2xl mx-auto'>
             Start organizing your tasks today and experience the difference
           </p>
           <Link

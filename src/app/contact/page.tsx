@@ -169,7 +169,7 @@ export default function Contact() {
         </div>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
           <div className='bg-indigo-900/15 backdrop-blur-md rounded-3xl p-8 sm:p-10 border border-indigo-700/50 shadow-2xl shadow-indigo-900/20'>
-            <h2 className='text-3xl font-bold text-white mb-8 text-center sm:text-left'>Send us a message</h2>
+            <h2 className='text-2xl font-bold text-white mb-8 text-center sm:text-left'>Send us a message</h2>
             <form onSubmit={handleSubmit} className='space-y-6' noValidate>
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
                 <div>
@@ -303,7 +303,7 @@ export default function Contact() {
           </div>
           <div className='space-y-8'>
             <div>
-              <h2 className='text-3xl font-bold text-white mb-6'>Contact Information</h2>
+              <h2 className='text-2xl font-bold text-white mb-6 text-center sm:text-left'>Contact Information</h2>
               <p className='text-slate-400 mb-8 leading-relaxed text-md sm:text-lg'>
                 {`We're here to help! Reach out to us through any of the channels below, and we'll get back to you as soon as possible.`}
               </p>

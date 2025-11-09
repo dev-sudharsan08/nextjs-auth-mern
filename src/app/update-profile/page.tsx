@@ -304,7 +304,7 @@ export default function UpdateProfile() {
             <FaArrowLeft className='w-4 h-4' />
             <span>Dashboard</span>
           </Link> */}
-          <h1 className='text-4xl font-extrabold text-white tracking-tight'>
+          <h1 className='text-3xl sm:text-4xl font-extrabold text-white tracking-tight'>
             Account Settings
           </h1>
           {/* <button
@@ -354,31 +354,39 @@ export default function UpdateProfile() {
                 <span>Profile & Email</span>
               </h2>
               <div className='flex items-center space-x-4 mb-8 border-b border-white/10 pb-6'>
-                <div className='relative w-20 h-20'>
+                <div className='relative w-20 aspect-square'>
                   <Image
-                    src={formData.previewProfilePicture || userDetails?.profilePicture || 'https://avatar.iran.liara.run/public/43'}
-                    alt="User Avatar"
+                    src={
+                      formData.previewProfilePicture ||
+                      userDetails?.profilePicture ||
+                      'https://avatar.iran.liara.run/public/43'
+                    }
+                    alt='User Avatar'
                     width={100}
                     height={100}
                     className='w-full h-full rounded-full object-cover border-4 border-purple-500/50 shadow-lg'
                   />
                   <label
-                    htmlFor="avatar-upload"
+                    htmlFor='avatar-upload'
                     className='absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer'
                   >
                     <FaCamera className='w-6 h-6 text-white' />
                   </label>
                   <input
-                    type="file"
-                    id="avatar-upload"
-                    accept="image/*"
+                    type='file'
+                    id='avatar-upload'
+                    accept='image/*'
                     className='hidden'
                     onChange={handleAvatarUpload}
                   />
                 </div>
-                <div>
-                  <h3 className='text-white text-lg font-semibold'>{userDetails?.username}</h3>
-                  <p className='text-gray-400 text-sm'>Click on the image to update your profile photo.</p>
+                <div className='flex-1 min-w-0'>
+                  <h3 className='text-white text-lg font-semibold break-words'>
+                    {userDetails?.username}
+                  </h3>
+                  <p className='text-gray-400 text-sm'>
+                    Click on the image to update your profile photo.
+                  </p>
                 </div>
               </div>
               <form onSubmit={handleSubmitProfile} className='space-y-6'>
@@ -665,7 +673,7 @@ export default function UpdateProfile() {
       </div>
       {showDeleteModal && (
         <div
-          className='fixed inset-0 bg-black/70 z-50 flex items-center justify-center backdrop-blur-sm sm:px-6'
+          className='fixed inset-0 bg-black/70 z-50 flex items-center justify-center backdrop-blur-sm px-4 sm:px-6'
           onClick={!isDeleting ? () => setShowDeleteModal(false) : undefined}
         >
           <div

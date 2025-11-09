@@ -249,7 +249,7 @@ export default function ChangePassword() {
             <div className='w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-4'>
               <FaLock className='w-8 h-8 text-white' />
             </div>
-            <h1 className='text-3xl sm:text-4xl font-extrabold mb-2 text-white tracking-tight leading-tight'>
+            <h1 className='text-2xl sm:text-4xl font-extrabold mb-3 text-white tracking-tight leading-tight'>
               Change Password
             </h1>
             <p className='text-slate-300 text-sm sm:text-base'>Update your account password</p>
