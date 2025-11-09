@@ -121,10 +121,10 @@ const ForgotPassword = () => {
               <div className='w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-xl'>
                 <FiMail className='w-8 h-8 text-white' />
               </div>
-              <h1 className='text-4xl font-extrabold mb-2 text-white tracking-tight leading-tight'>
+              <h1 className='text-2xl sm:text-4xl font-extrabold mb-4 sm:mb-2 text-white tracking-tight leading-tight'>
                 Reset Password
               </h1>
-              <p className='text-slate-300 text-base'>Enter your email to receive a password reset link.</p>
+              <p className='text-slate-300 text-md'>Enter your email to receive a password reset link.</p>
             </div>
             <form className='space-y-6' onSubmit={handleForgotPassword} noValidate>
               <div>
