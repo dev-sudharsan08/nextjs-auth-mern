@@ -117,7 +117,7 @@ const VerifyEmailClient: React.FC<Props> = ({ token }) => {
   };
 
   return (
-    <div className='flex items-center justify-center px-4 sm:px-6'>
+    <div className='flex items-center justify-center sm:px-6'>
       <div className='bg-indigo-900/15 backdrop-blur-md shadow-2xl rounded-3xl p-6 sm:p-10 w-full max-w-md border border-indigo-700/50 transition-all duration-300 hover:scale-[1.01] shadow-indigo-900/20'>
         {getContent()}
       </div>

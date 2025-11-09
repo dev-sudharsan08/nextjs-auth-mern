@@ -70,7 +70,7 @@ export default function Features() {
   ];
 
   return (
-   <div className='px-4 sm:px-6'>
+   <div className='sm:px-6'>
       <div className='max-w-7xl mx-auto'>
         <div className='text-center mb-16'>
           <h1 className='text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent'>

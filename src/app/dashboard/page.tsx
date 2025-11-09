@@ -206,7 +206,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+      <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
         <div className='bg-opacity-10 backdrop-blur-lg rounded-3xl shadow-2xl p-6 sm:p-8 mb-8 border border-white border-opacity-20 transition-all duration-300 hover:scale-[1.005]'>
           <div className='flex flex-col sm:flex-row sm:items-center justify-between mb-6'>
             <div className='flex items-center space-x-4 mb-4 sm:mb-0'>
@@ -531,7 +531,7 @@ export default function Dashboard() {
       </div>
       {showDeleteModal.show && (
         <div
-          className='fixed inset-0 bg-black/70 z-50 flex items-center justify-center backdrop-blur-sm px-4 sm:px-6'
+          className='fixed inset-0 bg-black/70 z-50 flex items-center justify-center backdrop-blur-sm sm:px-6'
           onClick={() => setShowDeleteModal({ show: false, taskId: '' })}
         >
           <div

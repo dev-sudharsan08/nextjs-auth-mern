@@ -134,7 +134,7 @@ export default function Contact() {
 
   if (isSubmitted) {
     return (
-      <div className='flex items-center justify-center px-4 sm:px-6'>
+      <div className='flex items-center justify-center sm:px-6'>
         <div className='bg-indigo-900/15 backdrop-blur-md shadow-2xl rounded-3xl p-8 sm:p-12 w-full max-w-md border border-indigo-700/50 text-center'>
           <div className='w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg'>
             <HiCheckCircle className='w-10 h-10 text-white' />
@@ -157,19 +157,19 @@ export default function Contact() {
   }
 
   return (
-    <div className='min-h-screen px-4 sm:px-6 lg:px-8'>
+    <div className='min-h-screen sm:px-6 lg:px-8'>
       <div className='max-w-7xl mx-auto'>
         <div className='text-center mb-16'>
           <h1 className='text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent'>
             Get in Touch
           </h1>
-          <p className='text-xl sm:text-2xl text-slate-400 mb-8 max-w-3xl mx-auto'>
+          <p className='text-md sm:text-2xl text-slate-400 mb-8 max-w-3xl mx-auto'>
             {`Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.`}
           </p>
         </div>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
           <div className='bg-indigo-900/15 backdrop-blur-md rounded-3xl p-8 sm:p-10 border border-indigo-700/50 shadow-2xl shadow-indigo-900/20'>
-            <h2 className='text-3xl font-bold text-white mb-8'>Send us a message</h2>
+            <h2 className='text-3xl font-bold text-white mb-8 text-center sm:text-left'>Send us a message</h2>
             <form onSubmit={handleSubmit} className='space-y-6' noValidate>
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
                 <div>
@@ -304,7 +304,7 @@ export default function Contact() {
           <div className='space-y-8'>
             <div>
               <h2 className='text-3xl font-bold text-white mb-6'>Contact Information</h2>
-              <p className='text-slate-400 mb-8 leading-relaxed text-lg'>
+              <p className='text-slate-400 mb-8 leading-relaxed text-md sm:text-lg'>
                 {`We're here to help! Reach out to us through any of the channels below, and we'll get back to you as soon as possible.`}
               </p>
             </div>
@@ -314,7 +314,7 @@ export default function Contact() {
                   key={index}
                   className='bg-violet-900 rounded-2xl p-6 border border-indigo-700/30 shadow-lg group hover:border-indigo-500 transition-all duration-300'
                 >
-                  <div className='flex items-start space-x-6'>
+                  <div className='flex items-start space-x-4 sm:space-x-6'>
                     <div className={`w-14 h-14 bg-gradient-to-br ${info.color} rounded-xl flex items-center justify-center shadow-lg shadow-gray-900/50 group-hover:scale-[1.05] transition-transform`}>
                       {info.icon}
                     </div>

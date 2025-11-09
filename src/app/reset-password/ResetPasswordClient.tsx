@@ -176,7 +176,7 @@ const ResetPasswordClient: React.FC<PasswordProps> = ({ token }) => {
 
   if (!token) {
     return (
-      <div className='flex items-center justify-center px-4'>
+      <div className='flex items-center justify-center sm:px-6'>
         <div className='bg-indigo-900/15 backdrop-blur-md shadow-2xl rounded-3xl p-6 sm:p-10 w-full max-w-md border border-indigo-700/50 transition-all duration-300 hover:scale-[1.01] hover:bg-indigo-900/20 shadow-indigo-900/20 ring-2 ring-transparent hover:ring-sky-500'>
           <div className='text-center'>
             <div className='w-20 h-20 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6'>
@@ -203,7 +203,7 @@ const ResetPasswordClient: React.FC<PasswordProps> = ({ token }) => {
   return (
     <>
       <Spinner loading={loader} />
-      <div className='flex flex-col items-center justify-center px-4 sm:px-6'>
+      <div className='flex flex-col items-center justify-center sm:px-6'>
         {isError && (
           <div className='w-full max-w-md mb-6'>
             <Alert message={message} type='error' className='text-center' />

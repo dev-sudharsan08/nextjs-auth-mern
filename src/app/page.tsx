@@ -62,20 +62,20 @@ const homeData = [
   ];
 
   return (
-    <div className='flex flex-col items-center justify-center px-4 sm:px-6 relative'>
+    <div className='flex flex-col items-center justify-center sm:px-6 relative'>
       <div className='text-center max-w-7xl mx-auto mx-auto relative z-10'>
         <div className='mb-8'>
-          <h1 className='text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent leading-tight'>
+          <h1 className='text-4xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent leading-tight'>
             Welcome to
             <span className='block bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'>
               TaskRebel
             </span>
           </h1>
-          <p className='text-xl md:text-2xl text-slate-300 mb-8 leading-relaxed'>
+          <p className='text-md md:text-2xl text-slate-300 mb-8 leading-relaxed'>
             Your ultimate task management solution. Organize, prioritize, and achieve your goals with ease.
           </p>
         </div>
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-8 p-4 rounded-3xl'>
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-8 py-4 rounded-3xl'>
           {homeData.map((item, index) => (
             <div key={index} className='bg-white/5 backdrop-blur-lg rounded-2xl p-7 border border-white/10 shadow-2xl hover:bg-white/15 transition-all duration-500 group transform hover:-translate-y-1'>
               <div aria-label={`${item.title} icon`} className={`w-14 h-14 bg-gradient-to-br ${item.className} rounded-xl flex items-center justify-center mb-6 shadow-${item.className.replace('from-', '').replace(' to-', '-')}/50 group-hover:scale-105 transition-transform duration-500 mx-auto`}>
@@ -109,17 +109,17 @@ const homeData = [
         </div>
         <div className='bg-indigo-900/15 rounded-3xl p-8 sm:p-12 border border-indigo-700/50 shadow-2xl shadow-indigo-900/20 mt-14 md:mt-20'>
           <div className='text-center mb-12'>
-            <h2 className='text-3xl sm:text-4xl font-extrabold text-white mb-4'>
+            <h2 className='text-2xl sm:text-4xl font-extrabold text-white mb-4'>
               Trusted by Thousands
             </h2>
-            <p className='text-slate-400 text-lg'>
+            <p className='text-slate-400 text-md sm:text-lg'>
               Join the growing community of productive users
             </p>
           </div>
           <div className='grid grid-cols-2 lg:grid-cols-4 gap-8'>
             {features.map((feature, index) => (
               <div key={index} className='text-center'>
-                <div className={`text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r ${feature.className} mb-2`}>
+                <div className={`text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r ${feature.className} mb-2`}>
                   {feature.title}
                 </div>
                 <div className='text-slate-300 uppercase tracking-wider text-sm'>{feature.text}</div>

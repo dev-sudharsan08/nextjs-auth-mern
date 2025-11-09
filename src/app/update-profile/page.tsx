@@ -295,7 +295,7 @@ export default function UpdateProfile() {
   return (
     <>
       <Spinner loading={loader || avatarLoader} />
-      <div className='max-w-7xl mx-auto space-y-8 px-4 sm:px-6'>
+      <div className='max-w-7xl mx-auto space-y-8 sm:px-6'>
         <div className='flex items-center justify-center pb-6 border-b border-white/10'>
           {/* <Link
             href='/dashboard'
@@ -665,7 +665,7 @@ export default function UpdateProfile() {
       </div>
       {showDeleteModal && (
         <div
-          className='fixed inset-0 bg-black/70 z-50 flex items-center justify-center backdrop-blur-sm px-4 sm:px-6'
+          className='fixed inset-0 bg-black/70 z-50 flex items-center justify-center backdrop-blur-sm sm:px-6'
           onClick={!isDeleting ? () => setShowDeleteModal(false) : undefined}
         >
           <div

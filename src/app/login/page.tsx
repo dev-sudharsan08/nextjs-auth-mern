@@ -182,7 +182,7 @@ const Login = () => {
   return (
     <>
       <Spinner loading={loader} />
-      <div className='flex flex-col items-center justify-center px-4 sm:px-6'>
+      <div className='flex flex-col items-center justify-center sm:px-6'>
         <div className='w-full max-w-md mb-6'>
           {isError && (
             <Alert
