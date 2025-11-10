@@ -467,7 +467,7 @@ export default function Dashboard() {
           )}
           <div className='space-y-4'>
             {tasks.length === 0 ? (
-              <div className='text-center py-8 text-gray-400 bg-opacity-5 backdrop-blur-sm rounded-2xl border border-white border-opacity-10'>
+              <div className='text-center py-8 px-3 text-gray-400 bg-opacity-5 backdrop-blur-sm rounded-2xl border border-white border-opacity-10'>
                 <p className='text-lg'>No tasks yet. Create your first task! 🚀</p>
               </div>
             ) : (

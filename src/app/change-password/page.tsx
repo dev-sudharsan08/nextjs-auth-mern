@@ -243,7 +243,7 @@ export default function ChangePassword() {
           />
         </div>
       )}
-      <div className='flex items-center justify-center px-4 sm:px-6'>
+      <div className='flex items-center justify-center sm:px-6'>
         <div className='bg-indigo-900/15 backdrop-blur-md shadow-2xl rounded-3xl p-6 sm:p-10 w-full max-w-md border border-indigo-700/50 transition-all duration-300 hover:scale-[1.01] hover:bg-indigo-900/20 shadow-indigo-900/20 ring-2 ring-transparent hover:ring-sky-500'>
           <div className='text-center mb-8'>
             <div className='w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-4'>
