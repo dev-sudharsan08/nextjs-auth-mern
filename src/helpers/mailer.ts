@@ -24,14 +24,26 @@ export default async function sendEmail({ email, emailType, userId }: SendEmailP
       });
     }
 
-    const transport = nodemailer.createTransport({
-      host: 'sandbox.smtp.mailtrap.io',
-      port: 2525,
-      auth: {
-        user: process.env.NODEMAILER_USERID,
-        pass: process.env.NODEMAILER_PASSWORD,
-      },
-    });
+    const transport = nodemailer.createTransport(
+      process.env.NODE_ENV === 'production'
+        ? {
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_APP_PASSWORD,
+          },
+        }
+        : {
+          host: 'sandbox.smtp.mailtrap.io',
+          port: 2525,
+          auth: {
+            user: process.env.MAILTRAP_USER,
+            pass: process.env.MAILTRAP_PASSWORD,
+          },
+        }
+    );
 
     const verificationLink = emailType === 'VERIFY'
       ? `${process.env.DOMAIN}/verify-email?token=${hashedToken}`
