@@ -90,6 +90,12 @@ export default function UpdateProfile() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (isAvatarSuccess) {
+      setIsError({ isError: false, message: '' });
+    }
+  }, [isAvatarSuccess]);
+
   async function fetchUserDetails() {
     setIsError({ isError: false, message: '' });
     setLoader(true);
@@ -133,18 +139,23 @@ export default function UpdateProfile() {
 
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    setIsError({ isError: false, message: '' });
     setIsSuccess(false);
 
     if (!file) return;
+
+    const maxSizeInBytes = 5 * 1024 * 1024;
+    if (file.size > maxSizeInBytes) {
+      setIsError({ isError: true, message: 'File size exceeds 5MB. Please select a smaller file.' });
+      return;
+    }
+
     setAvatarLoader(true);
     setTimeout(() => {
       const previewUrl = URL.createObjectURL(file);
-      setFormData(prev => ({ ...prev, previewProfilePicture: previewUrl, }));
+      setFormData(prev => ({ ...prev, previewProfilePicture: previewUrl }));
       setProfileImageFile(file);
       setIsAvatarSuccess(true);
       setAvatarLoader(false);
-      setTimeout(() => setIsAvatarSuccess(false), 3000);
     }, 1500);
   };
 
@@ -335,7 +346,7 @@ export default function UpdateProfile() {
                     // isPreferencesSuccess ? 'Preferences saved!' :
                     // isPrivacySuccess ? 'Privacy settings saved!' :
                     //   isIntegrationsSuccess ? 'Integration status updated!' :
-                    'Profile image uploaded!'
+                    'Your profile image has been successfully uploaded. Click “Save Profile Changes” to apply the update.'
               }
               type='success'
               // icon={<FaCheckCircle className="w-5 h-5" />}

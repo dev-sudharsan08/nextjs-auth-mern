@@ -28,6 +28,19 @@ export async function PATCH(request: NextRequest) {
       username: username.trim(),
     };
 
+    if (profilePictureFile) {
+      const maxSizeInBytes = 5 * 1024 * 1024;
+
+      if (profilePictureFile.size > maxSizeInBytes) {
+        return NextResponse.json({ error: 'Profile picture size exceeds 5MB limit.' }, { status: 400 });
+      }
+
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+      if (!allowedTypes.includes(profilePictureFile.type)) {
+        return NextResponse.json({ error: 'Unsupported profile picture format.' }, { status: 400 });
+      }
+    }
+
     let newImageUrl: string | undefined;
     if (profilePictureFile) {
       newImageUrl = await uploadImageAndGetUrl(profilePictureFile);

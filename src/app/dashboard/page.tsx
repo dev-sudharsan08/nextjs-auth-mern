@@ -51,6 +51,11 @@ export default function Dashboard() {
   });
   const [showDeleteModal, setShowDeleteModal] = useState({ show: false, taskId: '' });
 
+  let element: HTMLElement | null = null;
+  if (typeof window !== 'undefined') {
+    element = document.getElementById('tasksSection');
+  }
+
   useEffect(() => {
     fetchUserDetails();
     fetchTasks();
@@ -102,6 +107,9 @@ export default function Dashboard() {
       setTasks([response.data.task, ...tasks]);
       setNewTask({ title: '', description: '', priority: 'Medium', dueDate: '', status: 'To Do', });
       setShowAddTask(false);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         router.push('/logout?reason=expired');
@@ -131,6 +139,9 @@ export default function Dashboard() {
       ));
       setNewTask({ title: '', description: '', priority: 'Medium', dueDate: '', status: 'To Do', });
       setEditingTask(null);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         router.push('/logout?reason=expired');
@@ -147,6 +158,9 @@ export default function Dashboard() {
       setShowDeleteModal({ show: false, taskId: '' })
       await axios.delete(`/api/users/tasks/${taskId}`);
       setTasks(tasks.filter(task => task._id !== taskId));
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         router.push('/logout?reason=expired');
@@ -172,8 +186,21 @@ export default function Dashboard() {
   function handleCancelEdit() {
     setEditingTask(null);
     setNewTask({ title: '', description: '', priority: 'Medium', dueDate: '', status: 'To Do', });
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
+  function handleCancel() {
+    if (editingTask) {
+      handleCancelEdit();
+    } else {
+      setShowAddTask(false)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'High': return 'bg-red-600/30 text-red-200 border border-red-500/50';
@@ -334,7 +361,7 @@ export default function Dashboard() {
             </div>
           )}
         </div>
-        <div className='bg-indigo-950/20 backdrop-blur-md shadow-2xl rounded-3xl p-6 sm:p-10 border-indigo-950/10 transition-all duration-300 hover:scale-[1.01] shadow-indigo-900/20 ring-2 ring-cyan-600/25 hover:ring-indigo-600/20'>
+        <div className='bg-indigo-950/20 backdrop-blur-md shadow-2xl rounded-3xl p-6 sm:p-10 border-indigo-950/10 transition-all duration-300 hover:scale-[1.01] shadow-indigo-900/20 ring-2 ring-cyan-600/25 hover:ring-indigo-600/20' id='tasksSection'>
           <div className='flex flex-col sm:flex-row sm:items-center justify-between mb-6'>
             <div className='flex items-center space-x-3 mb-4 sm:mb-0'>
               <div className='w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center'>
@@ -451,7 +478,7 @@ export default function Dashboard() {
               <div className='flex flex-col sm:flex-row sm:justify-end space-x-3 my-3 sm:my-0'>
                 <button
                   type='button'
-                  onClick={editingTask ? handleCancelEdit : () => setShowAddTask(false)}
+                  onClick={handleCancel}
                   className='px-6 py-2 bg-gray-600/20 text-gray-300 border border-gray-400/30 rounded-lg hover:bg-gray-600/40 transition duration-200 mb-3 sm:mb-0 mr-0 sm:mr-3'
                 >
                   Cancel
