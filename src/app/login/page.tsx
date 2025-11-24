@@ -142,6 +142,10 @@ const Login = () => {
       if (response?.data?.isLoginSuccess) {
         setUserData({ email: '', password: '' });
         localStorage.setItem('isUserloggedIn', JSON.stringify(true));
+        try {
+          window.dispatchEvent(new CustomEvent('isUserloggedInChanged', { detail: true }));
+        } catch (e) {
+        }
         router.push('/dashboard');
       }
     } catch (error: unknown) {

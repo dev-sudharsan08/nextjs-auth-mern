@@ -39,6 +39,10 @@ const LogoutClient = ({ isExpired }: LogoutClientProps) => {
       setLoader(true);
       const response = await axios.get('/api/users/logout', {});
       localStorage.removeItem('isUserloggedIn');
+      try {
+        window.dispatchEvent(new CustomEvent('isUserloggedInChanged', { detail: false }));
+      } catch (e) {
+      }
       console.log(response);
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {

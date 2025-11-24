@@ -29,7 +29,17 @@ export default function Header() {
       if (_e.key === 'isUserloggedIn') readAuth();
     };
     window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
+
+    // Listen for a custom event dispatched from login/logout components
+    const onAuthChanged = () => {
+      readAuth();
+    };
+    window.addEventListener('isUserloggedInChanged', onAuthChanged as EventListener);
+
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('isUserloggedInChanged', onAuthChanged as EventListener);
+    };
   }, [pathName]);
 
   return (
