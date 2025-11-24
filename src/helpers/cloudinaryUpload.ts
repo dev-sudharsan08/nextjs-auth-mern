@@ -11,25 +11,33 @@ async function convertFileToDataUri(file: File): Promise<string> {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
   const base64 = buffer.toString('base64');
-  return `data:${file.type};base64,${base64}`;
+  const mime = file.type && file.type.length ? file.type : 'image/jpeg';
+  return `data:${mime};base64,${base64}`;
 }
 
 export default async function uploadImageAndGetUrl(file: File): Promise<string> {
-  console.log("File received for upload:", file.name);
+  console.log("File received for upload:", (file as any).name || 'unknown', 'type:', file.type || 'unknown', 'size:', (file as any).size || 'unknown');
 
   if (!process.env.CLOUDINARY_CLOUD_NAME) {
     throw new Error("Cloudinary environment variables are not set.");
   }
 
   // 1. Convert File to Data URI
-  const dataUri = await convertFileToDataUri(file);
+  let dataUri: string;
+  try {
+    dataUri = await convertFileToDataUri(file);
+  } catch (err) {
+    console.error('Error converting file to data URI:', err);
+    throw new Error('Failed to process the uploaded file.');
+  }
 
   try {
     // 2. Upload the Data URI to Cloudinary
     const uploadResult = await cloudinary.uploader.upload(dataUri, {
-      folder: "nextjs-user-profiles", // Optional: Organize uploads in a specific folder
+      folder: "nextjs-user-profiles",
+      resource_type: 'image',
       // Optional: Apply transformations, e.g., square crop and resize
-      // transformation: [{ width: 150, height: 150, crop: "fill" }] 
+      // transformation: [{ width: 150, height: 150, crop: "fill" }]
     });
 
     // 3. Return the final public URL

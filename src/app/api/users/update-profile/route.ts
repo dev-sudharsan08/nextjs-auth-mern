@@ -35,8 +35,25 @@ export async function PATCH(request: NextRequest) {
         return NextResponse.json({ error: 'Profile picture size exceeds 5MB limit.' }, { status: 400 });
       }
 
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-      if (!allowedTypes.includes(profilePictureFile.type)) {
+      const allowedTypes = [
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/webp',
+        'image/gif',
+        'image/heic',
+        'image/heif',
+      ];
+
+      const fileType = profilePictureFile.type || '';
+      const fileName = (profilePictureFile as any).name || '';
+      const ext = fileName.split('.').pop()?.toLowerCase();
+
+      console.log('Profile picture upload - name:', fileName, 'type:', fileType, 'size:', profilePictureFile.size);
+
+      const allowedExts = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'heic', 'heif'];
+
+      if (!allowedTypes.includes(fileType) && !(ext && allowedExts.includes(ext))) {
         return NextResponse.json({ error: 'Unsupported profile picture format.' }, { status: 400 });
       }
     }
