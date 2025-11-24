@@ -46,7 +46,7 @@ export async function PATCH(request: NextRequest) {
       ];
 
       const fileType = profilePictureFile.type || '';
-      const fileName = (profilePictureFile as any).name || '';
+      const fileName = profilePictureFile.name || '';
       const ext = fileName.split('.').pop()?.toLowerCase();
 
       console.log('Profile picture upload - name:', fileName, 'type:', fileType, 'size:', profilePictureFile.size);

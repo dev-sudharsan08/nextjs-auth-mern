@@ -41,7 +41,8 @@ const LogoutClient = ({ isExpired }: LogoutClientProps) => {
       localStorage.removeItem('isUserloggedIn');
       try {
         window.dispatchEvent(new CustomEvent('isUserloggedInChanged', { detail: false }));
-      } catch (e) {
+      } catch (_e) {
+        console.log(_e);
       }
       console.log(response);
     } catch (error: unknown) {

@@ -16,7 +16,12 @@ async function convertFileToDataUri(file: File): Promise<string> {
 }
 
 export default async function uploadImageAndGetUrl(file: File): Promise<string> {
-  console.log("File received for upload:", (file as any).name || 'unknown', 'type:', file.type || 'unknown', 'size:', (file as any).size || 'unknown');
+  console.log(
+    "File received for upload:",
+    file.name || 'unknown',
+    'type:', file.type || 'unknown',
+    'size:', file.size ?? 'unknown'
+  );
 
   if (!process.env.CLOUDINARY_CLOUD_NAME) {
     throw new Error("Cloudinary environment variables are not set.");

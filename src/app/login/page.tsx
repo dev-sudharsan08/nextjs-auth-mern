@@ -144,7 +144,8 @@ const Login = () => {
         localStorage.setItem('isUserloggedIn', JSON.stringify(true));
         try {
           window.dispatchEvent(new CustomEvent('isUserloggedInChanged', { detail: true }));
-        } catch (e) {
+        } catch (_e) {
+          console.log(_e);
         }
         router.push('/dashboard');
       }
