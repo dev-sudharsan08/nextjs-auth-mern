@@ -8,6 +8,7 @@ const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
       dbName: process.env.MONGODB_NAME,
+      autoIndex: true,
     });
     const db = mongoose.connection;
     if (db.listenerCount('error') === 0) {
