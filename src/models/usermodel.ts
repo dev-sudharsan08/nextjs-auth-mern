@@ -21,6 +21,12 @@ import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema(
   {
+    authProvider: {
+      type: String,
+    },
+    authProviderId: {
+      type: String,
+    },
     username: {
       type: String,
       required: [true, 'Please provide a name'],

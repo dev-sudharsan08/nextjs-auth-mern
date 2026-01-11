@@ -1,43 +1,42 @@
-import { NextResponse, NextRequest } from 'next/server';
-import jwt from 'jsonwebtoken';
+import NextAuth from "next-auth";
+import { NextResponse } from "next/server";
+import { authConfig } from "./lib/config/auth.config";
 
-export async function middleware(request: NextRequest) {
-  const path = request.nextUrl.pathname;
+const { auth } = NextAuth(authConfig);
+
+export default auth((req) => {
+  const { nextUrl } = req;
+  const isLoggedIn = !!req.auth;
+
   const isPublicRoute =
-    path === '/login' ||
-    path === '/' ||
-    path === '/forgot-password' ||
-    path === '/reset-password' ||
-    path === '/signup';
+    nextUrl.pathname === '/login' ||
+    nextUrl.pathname === '/' ||
+    nextUrl.pathname === '/forgot-password' ||
+    nextUrl.pathname === '/reset-password' ||
+    nextUrl.pathname === '/signup';
 
   const isProtectedRoute =
-    path === '/dashboard' ||
-    path === '/change-password' ||
-    path === '/update-profile' ||
-    path === '/logout';
+    nextUrl.pathname === '/dashboard' ||
+    nextUrl.pathname === '/change-password' ||
+    nextUrl.pathname === '/update-profile' ||
+    nextUrl.pathname === '/logout';
 
-  const token = request.cookies.get('token')?.value || '';
+  // 2. Redirect Logic
 
-  // if (path === '/logout' && request.nextUrl.searchParams.has('reason')) {
-  //   return NextResponse.next();
-  // }
+  // Case A: User is logged in but tries to visit public auth pages (like /login)
+  if (isLoggedIn && isPublicRoute) {
+    return NextResponse.redirect(new URL('/dashboard', nextUrl));
+  }
 
-  if (token) {
-    try {
-      jwt.decode(token);
-      if (isPublicRoute) {
-        return NextResponse.redirect(new URL('/dashboard', request.url));
-      }
-    } catch {
-      return NextResponse.redirect(new URL('/logout?reason=expired', request.url));
-    }
-  } else if (isProtectedRoute) {
-    return NextResponse.redirect(new URL('/login', request.url));
+  // Case B: User is NOT logged in but tries to visit protected pages
+  if (!isLoggedIn && isProtectedRoute) {
+    return NextResponse.redirect(new URL('/login', nextUrl));
   }
 
   return NextResponse.next();
-}
+});
 
+// 3. Matcher Config (Same as before)
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
 };

@@ -10,6 +10,7 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
 import { IoWarningOutline } from 'react-icons/io5';
 import Image from 'next/image';
+import { useSession } from "next-auth/react"
 
 interface User {
   _id: string;
@@ -33,6 +34,7 @@ interface Task {
 
 export default function Dashboard() {
   const router = useRouter();
+  const { data: session } = useSession()
   const [loader, setLoader] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -56,6 +58,7 @@ export default function Dashboard() {
     element = document.getElementById('tasksSection');
   }
 
+  console.log(session, 'session')
   useEffect(() => {
     fetchUserDetails();
     fetchTasks();

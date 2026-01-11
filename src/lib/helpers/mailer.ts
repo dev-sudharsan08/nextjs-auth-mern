@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { User } from '../lib/paths';
+import { User } from '../paths';
 import bcryptjs from 'bcryptjs';
 
 interface SendEmailParams {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB, User } from '../../../../lib/paths';
-import sendEmail from '@/helpers/mailer';
+import sendEmail from '@/lib/helpers/mailer';
 
 connectDB();
 

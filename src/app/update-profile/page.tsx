@@ -10,6 +10,7 @@ import Alert from '../components/reusable/alert/alert';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { IoWarningOutline } from 'react-icons/io5';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
 
 interface UserData {
   username: string;
@@ -36,6 +37,7 @@ interface UserData {
 
 export default function UpdateProfile() {
   const router = useRouter();
+  const { data: session, update } = useSession();
   const [loader, setLoader] = useState(false);
   const [avatarLoader, setAvatarLoader] = useState(false);
   const [userDetails, setUserDetails] = useState<UserData | null>(null);
@@ -104,6 +106,13 @@ export default function UpdateProfile() {
       if (response.data.data) {
         setUserDetails(response.data.data);
         setFormData(response.data.data);
+        await update({
+          ...session,
+          user: {
+            ...session?.user,
+            image: response.data.profilePicture
+          }
+       });
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -707,7 +716,7 @@ export default function UpdateProfile() {
                 onClick={handleDeleteAccount}
                 disabled={isDeleting}
                 className={`
-                    px-4 py-2 text-sm font-semibold rounded-lg text-white transition duration-150 shadow-md 
+                    px-4 py-2 text-sm font-semibold rounded-lg text-white transition duration-150 shadow-md
                     ${isDeleting
                     ? 'bg-red-400 cursor-not-allowed flex items-center'
                     : 'bg-red-600 hover:bg-red-700'

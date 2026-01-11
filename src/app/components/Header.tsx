@@ -1,5 +1,6 @@
 'use client';
 
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -8,6 +9,7 @@ import { HiBadgeCheck } from 'react-icons/hi';
 
 export default function Header() {
   const pathName = usePathname()
+    const { data: session } = useSession()
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -68,14 +70,14 @@ export default function Header() {
             <span className='text-sm font-medium'>Contact</span>
           </Link>
 
-          {isAuthenticated ? (
-            <Link
-              className='flex items-center space-x-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 group'
-              href='/logout'
-            >
-              <FaSignOutAlt className='w-4 h-4 group-hover:translate-x-1 transition-transform' />
-              <span>Logout</span>
-            </Link>
+          {session?.user?.id ? (
+            <button
+            onClick={() => signOut({ callbackUrl: "/login" })} // Redirects after logout
+            className='flex items-center space-x-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 group'
+          >
+            <FaSignOutAlt className='w-4 h-4 group-hover:translate-x-1 transition-transform' />
+            <span>Logout</span>
+          </button>
           ) : (
             <Link
               href='/login'
@@ -88,7 +90,7 @@ export default function Header() {
         </nav>
 
         <div className='md:hidden flex items-center space-x-3'>
-          {isAuthenticated ? (
+          {session?.user?.id ? (
             <Link
               className='flex items-center space-x-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 group'
               href='/logout'

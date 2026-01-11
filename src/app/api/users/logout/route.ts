@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB, User } from '../../../../lib/paths';
-import getDataFromToken from '@/helpers/getDataFromToken';
+import getDataFromToken from '@/lib/helpers/getDataFromToken';
 
 connectDB();
 

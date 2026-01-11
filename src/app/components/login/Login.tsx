@@ -7,6 +7,7 @@ import Alert from '../reusable/alert/alert';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { HiOutlineArrowRightOnRectangle, HiEye, HiEyeSlash, HiOutlineExclamationCircle } from 'react-icons/hi2';
+import { signIn } from 'next-auth/react';
 
 interface LoginData {
   email: string;
@@ -136,18 +137,29 @@ const Login = () => {
       setLoader(true);
       setLoginBtnDisabled(true);
 
-      const response = await axios.post('/api/users/login', userData);
+      // const response = await axios.post('/api/users/login', userData);
 
-      console.log(response);
-      if (response?.data?.isLoginSuccess) {
-        setUserData({ email: '', password: '' });
-        localStorage.setItem('isUserloggedIn', JSON.stringify(true));
-        try {
-          window.dispatchEvent(new CustomEvent('isUserloggedInChanged', { detail: true }));
-        } catch (_e) {
-          console.log(_e);
-        }
-        router.push('/dashboard');
+      // console.log(response);
+      // if (response?.data?.isLoginSuccess) {
+      //   setUserData({ email: '', password: '' });
+      //   localStorage.setItem('isUserloggedIn', JSON.stringify(true));
+      //   try {
+      //     window.dispatchEvent(new CustomEvent('isUserloggedInChanged', { detail: true }));
+      //   } catch (_e) {
+      //     console.log(_e);
+      //   }
+      //   router.push('/dashboard');
+      // }
+      const result = await signIn("credentials", {
+        email: userData.email,
+        password: userData.password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setIsError({ isError: true, message: 'Invalid email or password' });
+      } else {
+        router.push("/dashboard"); // Redirect manually on success
       }
     } catch (error: unknown) {
       setLoader(false);

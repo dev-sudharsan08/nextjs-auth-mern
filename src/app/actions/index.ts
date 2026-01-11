@@ -1,11 +1,11 @@
 'use server';
 
-import { signIn, signOut } from "../auth";
+import { signIn, signOut } from "../../lib/config/auth";
 
 export async function handleSocialLogin(formData: FormData) {
 	const action = formData.get('action');
 
-	await signIn(action as string, { redirectTo: "/post-login" });
+	await signIn(action as string, { redirectTo: "/dashboard" });
 }
 
 export async function handleLogOut() {

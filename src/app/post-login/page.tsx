@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { auth } from "../auth"
+import { auth } from "../../lib/config/auth"
 import { handleLogOut } from "../actions";
 
 export default async function page() {
