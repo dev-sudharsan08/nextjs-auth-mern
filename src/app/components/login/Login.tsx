@@ -28,7 +28,7 @@ interface PasswordInputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const PasswordInput: React.FC<PasswordInputProps> = ({
+const PasswordInput = ({
   id,
   name,
   label,
@@ -36,7 +36,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
   value,
   error,
   onChange
-}) => {
+}: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {

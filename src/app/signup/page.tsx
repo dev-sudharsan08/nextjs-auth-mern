@@ -31,14 +31,14 @@ interface PasswordInputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const PasswordInput: React.FC<PasswordInputProps> = ({ 
-  id, 
-  name, 
-  label, 
-  placeholder, 
-  value, 
-  error, 
-  onChange 
+const PasswordInput: React.FC<PasswordInputProps> = ({
+  id,
+  name,
+  label,
+  placeholder,
+  value,
+  error,
+  onChange
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -99,7 +99,7 @@ const SignUp = () => {
     username: '',
     email: '',
     password: '',
-    confirmPassword: '', 
+    confirmPassword: '',
   });
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [loader, setLoader] = useState(false);
@@ -162,14 +162,14 @@ const SignUp = () => {
     try {
       setLoader(true);
       setSignUpBtnDisabled(true);
-      
-      const { username, email, password } = userData; 
+
+      const { username, email, password } = userData;
       const response = await axios.post('/api/users/signup', { username, email, password });
-      
+
       console.log(response);
       if (response.data.data.isVerificationMailSent) {
         setIsSuccess(true);
-        setUserData({ username: '', email: '', password: '', confirmPassword: '' }); 
+        setUserData({ username: '', email: '', password: '', confirmPassword: '' });
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
@@ -191,7 +191,7 @@ const SignUp = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    
+
     setUserData((prev) => ({
       ...prev,
       [name]: value,
@@ -259,7 +259,7 @@ const SignUp = () => {
               />
               {formErrors.username &&
                 <div className='flex items-center mt-1 '>
-                  <HiOutlineExclamationCircle 
+                  <HiOutlineExclamationCircle
                     className='w-4 h-4 text-red-500 me-2 mb-0'
                     aria-label="Error"
                   />
@@ -288,7 +288,7 @@ const SignUp = () => {
               />
               {formErrors.email &&
                 <div className='flex items-center mt-1 '>
-                  <HiOutlineExclamationCircle 
+                  <HiOutlineExclamationCircle
                     className='w-4 h-4 text-red-500 me-2 mb-0'
                     aria-label="Error"
                   />
