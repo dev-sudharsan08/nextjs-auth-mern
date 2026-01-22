@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
 
-    // Set new cookies
+    // Set new cookies 
     response.cookies.set('token', newAccessToken, {
       httpOnly: true,
       maxAge: 60 * 60,
