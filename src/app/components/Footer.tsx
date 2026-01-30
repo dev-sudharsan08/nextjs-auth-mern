@@ -65,7 +65,8 @@ export default function Footer() {
 
         <div className='border-t border-slate-700/70 pt-8 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0'>
           <p className='text-slate-500 text-sm text-center sm:text-left'>
-            &copy; 2025 TaskRebel. All rights reserved. Built with <span className='text-red-500'>&hearts;</span> using Next.js
+            {`\u00A9 ${new Date().getFullYear()} TaskRebel. All Rights Reserved. `}
+            Built with <span className='text-red-500'>&hearts;</span> using Next.js
           </p>
           <div className='flex flex-wrap justify-center sm:justify-end space-x-6 text-sm font-medium'>
             <Link href='/' className='text-slate-400 hover:text-white transition-colors duration-200'>Privacy Policy</Link>
